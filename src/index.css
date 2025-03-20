@@ -1,11 +1,13 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -14,10 +16,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 196 80% 40%;
+    --primary: 181 100% 35%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96%;
+    --secondary: 220 13% 95%;
     --secondary-foreground: 222 47% 11%;
 
     --muted: 210 40% 96%;
@@ -31,18 +33,18 @@
 
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 196 80% 40%;
+    --ring: 181 100% 35%;
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5% 26%;
-    --sidebar-primary: 196 80% 40%;
+    --sidebar-background: 0 0% 13%; 
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 181 100% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 240 6% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 196 80% 40%;
+    --sidebar-accent: 0 0% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 181 100% 35%;
   }
 
   .dark {
@@ -55,7 +57,7 @@
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 196 80% 40%;
+    --primary: 181 100% 35%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 217 33% 18%;
@@ -64,7 +66,7 @@
     --muted: 217 33% 18%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 196 80% 40%;
+    --accent: 181 100% 35%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
@@ -72,16 +74,16 @@
 
     --border: 217 33% 18%;
     --input: 217 33% 18%;
-    --ring: 196 80% 40%;
+    --ring: 181 100% 35%;
 
-    --sidebar-background: 222 47% 11%;
+    --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 196 80% 40%;
+    --sidebar-primary: 181 100% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 18%;
+    --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 18%;
-    --sidebar-ring: 196 80% 40%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 181 100% 35%;
   }
 }
 
@@ -92,6 +94,7 @@
   
   html, body {
     @apply antialiased;
+    font-family: 'Inter', sans-serif;
   }
 
   body {
@@ -100,21 +103,68 @@
   }
 }
 
+/* Aramco specific design elements */
+.aramco-header {
+  @apply bg-aramco-black text-white;
+}
+
+.aramco-gradient-line {
+  height: 4px;
+  background: linear-gradient(90deg, #26D07C, #00A3B0, #0E86D4);
+}
+
+.aramco-card {
+  @apply rounded-lg overflow-hidden border border-border bg-card shadow-sm transition-all hover:shadow-md;
+}
+
+.aramco-card-image {
+  @apply h-48 w-full object-cover;
+}
+
+.aramco-card-content {
+  @apply p-4;
+}
+
+.aramco-card-title {
+  @apply text-lg font-medium mb-2;
+}
+
+.aramco-link {
+  @apply text-aramco-teal hover:text-aramco-blue flex items-center gap-2 font-medium;
+}
+
+.aramco-button {
+  @apply inline-flex items-center gap-2 bg-aramco-teal text-white px-4 py-2 rounded-full hover:bg-aramco-blue transition-colors font-medium;
+}
+
+.aramco-circle-button {
+  @apply flex items-center justify-center w-10 h-10 rounded-full bg-aramco-teal text-white;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom glassmorphism */
-.glass {
-  @apply bg-white/80 backdrop-blur-md border border-white/20;
+/* Refined scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.dark .glass {
-  @apply bg-black/30 backdrop-blur-md border border-white/10;
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
 
-/* Smooth transitions */
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary/50;
+}
+
+/* Animations */
 .page-transition-enter {
   opacity: 0;
   transform: translateY(20px);
@@ -135,22 +185,4 @@ html {
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 300ms, transform 300ms;
-}
-
-/* Refined scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-primary/30 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary/50;
 }

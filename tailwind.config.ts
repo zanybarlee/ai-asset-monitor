@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -62,6 +61,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				aramco: {
+					black: '#222222',
+					darkGray: '#333333',
+					mediumGray: '#555555',
+					lightGray: '#F1F1F1',
+					teal: '#00A3B0',
+					green: '#26D07C',
+					blue: '#0E86D4'
 				}
 			},
 			borderRadius: {
@@ -112,6 +120,13 @@ export default {
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
 				'pulse-slow': 'pulse-slow 3s infinite',
 				'float': 'float 6s ease-in-out infinite'
+			},
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+			},
+			backgroundImage: {
+				'aramco-gradient': 'linear-gradient(90deg, #00A3B0, #0E86D4)',
+				'aramco-highlight': 'linear-gradient(90deg, #26D07C, #00A3B0)',
 			}
 		}
 	},
