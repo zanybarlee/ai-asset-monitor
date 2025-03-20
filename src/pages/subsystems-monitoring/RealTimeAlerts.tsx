@@ -214,7 +214,7 @@ const RealTimeAlerts = () => {
               </div>
               <div>
                 <p className="text-muted-foreground">Threshold:</p>
-                <p className="font-medium">85% for >15 minutes</p>
+                <p className="font-medium">85% for &gt;15 minutes</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Assigned To:</p>
