@@ -18,8 +18,8 @@ const Sidebar = () => {
     { name: "Historical Data", href: "/historical", icon: Database },
     { name: "Site Management", href: "/sitemanagement", icon: Server },
     { name: "Power Management", href: "/power", icon: Zap },
-    { name: "Users", href: "/users", icon: Users },
     { name: "Visitors", href: "/visitors", icon: Clock },
+    { name: "Users", href: "/users", icon: Users },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
