@@ -22,7 +22,7 @@ const Sidebar = () => {
       <SidebarHeader className="flex h-16 items-center px-4 border-b">
         <div className="flex items-center gap-2">
           <img 
-            src="/lovable-uploads/9052d723-4f6c-40bd-9af8-b2d81d6cfc96.png" 
+            src="/lovable-uploads/0abd7d98-e706-4129-890b-45430c3eeb00.png" 
             alt="Aramco Logo" 
             className="h-8 w-8"
           />
