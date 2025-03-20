@@ -17,6 +17,7 @@ const DailyOperations = () => {
   // Determine which tab should be active based on the URL path
   const getActiveTab = () => {
     if (location.pathname.includes('/tasks')) return 'tasks';
+    if (location.pathname.includes('/compliance')) return 'compliance';
     if (location.pathname.includes('/reporting')) return 'reporting';
     return 'tasks'; // Default to tasks tab
   };
@@ -24,9 +25,9 @@ const DailyOperations = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Daily Operations & Inspection Module</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Daily Activities & Compliance Module</h2>
         <p className="text-muted-foreground">
-          Task automation, workflow management, and scheduled reporting for facility operations
+          Digital operational checklists, maintenance scheduling, and safety protocols for facility operations
         </p>
       </div>
 
@@ -34,6 +35,9 @@ const DailyOperations = () => {
         <TabsList>
           <TabsTrigger value="tasks" asChild>
             <Link to="/operations/tasks">Task & Workflow</Link>
+          </TabsTrigger>
+          <TabsTrigger value="compliance" asChild>
+            <Link to="/operations/compliance">Safety & Protocols</Link>
           </TabsTrigger>
           <TabsTrigger value="reporting" asChild>
             <Link to="/operations/reporting">Scheduled Reporting</Link>
