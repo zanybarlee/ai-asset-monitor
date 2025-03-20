@@ -21,15 +21,11 @@ const Sidebar = () => {
     <ShadcnSidebar>
       <SidebarHeader className="flex h-16 items-center px-4 border-b">
         <div className="flex items-center gap-2">
-          <div className="rounded-md bg-primary p-1.5">
-            <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L4 6V18L12 22L20 18V6L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M12 22V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M20 6L12 10L4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M4 14L12 18L20 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M12 10V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+          <img 
+            src="/lovable-uploads/9052d723-4f6c-40bd-9af8-b2d81d6cfc96.png" 
+            alt="Aramco Logo" 
+            className="h-8 w-8"
+          />
           <span className="text-xl font-semibold tracking-tight">ARAMCO CMMS</span>
         </div>
       </SidebarHeader>
