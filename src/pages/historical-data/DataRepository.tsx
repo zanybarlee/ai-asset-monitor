@@ -106,7 +106,13 @@ const DataRepository = () => {
                   colors={["#10b981", "#3b82f6", "#ef4444"]}
                   showLegend={true}
                   showAnimation={true}
-                  valueFormatter={(value: number) => `${value}${typeof value === 'number' && value === 'efficiency' ? "%" : ""}`}
+                  valueFormatter={(value: number, category?: string) => {
+                    // Fix: Now properly handling value and category as separate parameters
+                    if (category === "efficiency") {
+                      return `${value}%`;
+                    }
+                    return `${value}`;
+                  }}
                 />
               </div>
               <div className="mt-4 p-3 bg-muted/50 rounded-md border">
