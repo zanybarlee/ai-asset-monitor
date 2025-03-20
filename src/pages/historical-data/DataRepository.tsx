@@ -92,7 +92,7 @@ const DataRepository = () => {
                   colors={["#10b981", "#3b82f6", "#ef4444"]}
                   showLegend={true}
                   showAnimation={true}
-                  valueFormatter={(value: number) => `${value}${value === "efficiency" ? "%" : ""}`}
+                  valueFormatter={(value: number) => `${value}${value === 'efficiency' ? "%" : ""}`}
                 />
               </div>
               <div className="mt-4 p-3 bg-muted/50 rounded-md border">
@@ -197,10 +197,12 @@ const DataRepository = () => {
                       <TableCell>{record.component}</TableCell>
                       <TableCell>
                         <Badge variant={
-                          record.status === "Completed" ? "success" : 
-                          record.status === "Pending" ? "warning" : 
+                          record.status === "Completed" ? "default" : 
+                          record.status === "Pending" ? "secondary" : 
                           "outline"
-                        }>
+                        } 
+                        className={record.status === "Completed" ? "bg-green-500 hover:bg-green-600" : 
+                                   record.status === "Pending" ? "bg-yellow-500 hover:bg-yellow-600" : ""}>
                           {record.status}
                         </Badge>
                       </TableCell>

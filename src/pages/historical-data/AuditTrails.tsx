@@ -235,7 +235,8 @@ const AuditTrails = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={item.status === "Success" ? "success" : "destructive"}>
+                          <Badge variant={item.status === "Success" ? "default" : "destructive"} 
+                                 className={item.status === "Success" ? "bg-green-500 hover:bg-green-600" : ""}>
                             {item.status}
                           </Badge>
                         </TableCell>
