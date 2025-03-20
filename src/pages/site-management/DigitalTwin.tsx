@@ -1,8 +1,7 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Cube, Layers, Component, Maximize2, Minimize2, RotateCcw } from "lucide-react";
+import { Box, Layers, Component, Maximize2, Minimize2, RotateCcw } from "lucide-react";
 
 const DigitalTwin = () => {
   return (
@@ -30,7 +29,7 @@ const DigitalTwin = () => {
         <CardContent>
           <div className="aspect-video relative bg-black/5 rounded-md flex items-center justify-center border">
             <div className="text-center">
-              <Cube className="h-12 w-12 mx-auto text-aramco-teal opacity-50 mb-2" />
+              <Box className="h-12 w-12 mx-auto text-aramco-teal opacity-50 mb-2" />
               <p className="text-muted-foreground">3D Digital Twin View</p>
               <p className="text-xs text-muted-foreground mt-1">Interact with the 3D model to explore site assets</p>
               <Button className="mt-4" variant="outline">Initialize 3D View</Button>
