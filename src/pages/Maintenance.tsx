@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LineChart, BarChart } from "@/components/ui/chart";
+import { LineChart, BarChart } from "@/components/ui/charts";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, TrendingUp, FileText, FileDown, Activity } from "lucide-react";
 
