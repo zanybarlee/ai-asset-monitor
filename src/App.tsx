@@ -13,6 +13,10 @@ import Maintenance from "@/pages/Maintenance";
 import Users from "@/pages/Users";
 import Visitors from "@/pages/Visitors";
 import Settings from "@/pages/Settings";
+import SiteManagement from "@/pages/SiteManagement";
+import MEPEvaluation from "@/pages/site-management/MEPEvaluation";
+import DigitalTwin from "@/pages/site-management/DigitalTwin";
+import InventoryManagement from "@/pages/site-management/InventoryManagement";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +37,11 @@ const App = () => (
               <Route path="users" element={<Users />} />
               <Route path="visitors" element={<Visitors />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="sitemanagement" element={<SiteManagement />}>
+                <Route path="mep" element={<MEPEvaluation />} />
+                <Route path="digitaltwin" element={<DigitalTwin />} />
+                <Route path="inventory" element={<InventoryManagement />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
