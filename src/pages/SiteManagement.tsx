@@ -7,14 +7,21 @@ import { useEffect } from "react";
 const SiteManagement = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const path = location.pathname;
-
+  
   useEffect(() => {
     // Redirect to MEP evaluation by default if we're on the root path
-    if (path === "/sitemanagement") {
+    if (location.pathname === "/sitemanagement") {
       navigate("/sitemanagement/mep", { replace: true });
     }
-  }, [path, navigate]);
+  }, [location.pathname, navigate]);
+
+  // Determine which tab should be active based on the URL path
+  const getActiveTab = () => {
+    if (location.pathname.includes('/mep')) return 'mep';
+    if (location.pathname.includes('/digitaltwin')) return 'digitaltwin';
+    if (location.pathname.includes('/inventory')) return 'inventory';
+    return 'mep'; // Default to MEP tab
+  };
 
   return (
     <div className="space-y-6">
@@ -25,7 +32,7 @@ const SiteManagement = () => {
         </p>
       </div>
 
-      <Tabs defaultValue="mep" className="space-y-4" value={path.includes('/mep') ? 'mep' : path.includes('/digitaltwin') ? 'digitaltwin' : 'inventory'}>
+      <Tabs defaultValue="mep" value={getActiveTab()} className="space-y-4">
         <TabsList>
           <TabsTrigger value="mep" asChild>
             <Link to="/sitemanagement/mep">MEP Evaluation</Link>
