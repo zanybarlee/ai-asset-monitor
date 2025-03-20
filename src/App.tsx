@@ -21,6 +21,9 @@ import PowerManagement from "@/pages/PowerManagement";
 import RealTimeMonitoring from "@/pages/power-management/RealTimeMonitoring";
 import AutomatedReporting from "@/pages/power-management/AutomatedReporting";
 import InfrastructureManagement from "@/pages/power-management/InfrastructureManagement";
+import DailyOperations from "@/pages/DailyOperations";
+import TaskWorkflow from "@/pages/daily-operations/TaskWorkflow";
+import ScheduledReporting from "@/pages/daily-operations/ScheduledReporting";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +53,10 @@ const App = () => (
                 <Route path="monitoring" element={<RealTimeMonitoring />} />
                 <Route path="reporting" element={<AutomatedReporting />} />
                 <Route path="infrastructure" element={<InfrastructureManagement />} />
+              </Route>
+              <Route path="operations" element={<DailyOperations />}>
+                <Route path="tasks" element={<TaskWorkflow />} />
+                <Route path="reporting" element={<ScheduledReporting />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
