@@ -1,10 +1,15 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Search, QrCode, Calendar, Clock, User, Plus, Filter } from "lucide-react";
+import { 
+  Search, QrCode, Calendar, Clock, User, Plus, Filter, 
+  Shield, MapPin, History, UserCheck, LogIn, LogOut
+} from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const mockVisitors = [
   {
@@ -61,7 +66,36 @@ const mockVisitors = [
   }
 ];
 
+// Movement path data for each visitor
+const visitorMovements = {
+  "V-1001": [
+    { timestamp: "2023-08-12T09:30:00", zone: "Main Entrance", action: "Check In" },
+    { timestamp: "2023-08-12T09:35:00", zone: "Security Checkpoint", action: "Access Granted" },
+    { timestamp: "2023-08-12T09:42:00", zone: "Server Room B", action: "Access Granted" },
+    { timestamp: "2023-08-12T11:15:00", zone: "Cafeteria", action: "Access Granted" },
+    { timestamp: "2023-08-12T12:05:00", zone: "Server Room B", action: "Access Granted" },
+    { timestamp: "2023-08-12T14:15:00", zone: "Main Entrance", action: "Check Out" },
+  ],
+  "V-1002": [
+    { timestamp: "2023-08-12T10:00:00", zone: "Main Entrance", action: "Check In" },
+    { timestamp: "2023-08-12T10:07:00", zone: "Security Checkpoint", action: "Access Granted" },
+    { timestamp: "2023-08-12T10:15:00", zone: "Electrical Room", action: "Access Granted" },
+    { timestamp: "2023-08-12T12:30:00", zone: "Cafeteria", action: "Access Granted" },
+    { timestamp: "2023-08-12T13:15:00", zone: "Electrical Room", action: "Access Granted" },
+  ],
+  "V-1003": [
+    { timestamp: "2023-08-12T11:15:00", zone: "Main Entrance", action: "Check In" },
+    { timestamp: "2023-08-12T11:22:00", zone: "Security Checkpoint", action: "Access Granted" },
+    { timestamp: "2023-08-12T11:30:00", zone: "HVAC Control Room", action: "Access Granted" },
+  ]
+};
+
 const Visitors = () => {
+  const { toast } = useToast();
+  const [selectedVisitor, setSelectedVisitor] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("all");
+  const [qrScanActive, setQrScanActive] = useState(false);
+
   const formatDateTime = (timestamp: string | null) => {
     if (!timestamp) return "—";
     const date = new Date(timestamp);
@@ -81,13 +115,33 @@ const Visitors = () => {
     }
   };
 
+  const handleQrScan = () => {
+    setQrScanActive(true);
+    
+    // Simulate a successful QR scan after 2 seconds
+    setTimeout(() => {
+      setQrScanActive(false);
+      toast({
+        title: "QR Code Scanned Successfully",
+        description: "Visitor Lisa Chen (V-1002) verified.",
+      });
+    }, 2000);
+  };
+
+  const handleQuickCheckIn = () => {
+    toast({
+      title: "Visitor Check-In Complete",
+      description: "Temporary access badge issued to Robert Brown.",
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Visitor Management</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Visitor Management System</h2>
           <p className="text-muted-foreground">
-            Register and track visitors to the data center
+            Physical Security & Access Control Module
           </p>
         </div>
         <Button>
@@ -100,7 +154,7 @@ const Visitors = () => {
         <div className="md:col-span-3 space-y-4">
           <Card className="glass">
             <CardHeader className="pb-2">
-              <Tabs defaultValue="all" className="w-full">
+              <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full max-w-md grid-cols-4">
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="active">Active</TabsTrigger>
@@ -132,7 +186,11 @@ const Visitors = () => {
                 
                 <div className="divide-y">
                   {mockVisitors.map((visitor) => (
-                    <div key={visitor.id} className="grid grid-cols-6 p-3 text-sm items-center">
+                    <div 
+                      key={visitor.id} 
+                      className={`grid grid-cols-6 p-3 text-sm items-center cursor-pointer hover:bg-muted/30 ${selectedVisitor === visitor.id ? 'bg-muted/30' : ''}`}
+                      onClick={() => setSelectedVisitor(visitor.id)}
+                    >
                       <div className="col-span-2">
                         <p className="font-medium">{visitor.name}</p>
                         <p className="text-muted-foreground">{visitor.company}</p>
@@ -156,14 +214,72 @@ const Visitors = () => {
             </CardContent>
           </Card>
           
+          {selectedVisitor && visitorMovements[selectedVisitor as keyof typeof visitorMovements] && (
+            <Card className="glass">
+              <CardHeader>
+                <CardTitle>Movement Path Timeline</CardTitle>
+                <CardDescription>
+                  Detailed movement tracking for visitor {
+                    mockVisitors.find(v => v.id === selectedVisitor)?.name
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="relative pl-6 border-l">
+                  {visitorMovements[selectedVisitor as keyof typeof visitorMovements].map((movement, index) => (
+                    <div key={index} className="mb-4 relative">
+                      <div className="absolute -left-[23px] w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                        {movement.action.includes("Check In") ? (
+                          <LogIn className="h-3 w-3 text-white" />
+                        ) : movement.action.includes("Check Out") ? (
+                          <LogOut className="h-3 w-3 text-white" />
+                        ) : (
+                          <MapPin className="h-3 w-3 text-white" />
+                        )}
+                      </div>
+                      <div className="bg-card border rounded-md p-3">
+                        <div className="flex justify-between">
+                          <div className="font-medium">{movement.zone}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {new Date(movement.timestamp).toLocaleTimeString()}
+                          </div>
+                        </div>
+                        <div className="text-sm mt-1">
+                          <Badge variant="secondary">{movement.action}</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <Card className="glass">
             <CardHeader>
               <CardTitle>Visitor Access Map</CardTitle>
               <CardDescription>Real-time location and access zones</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border rounded-md p-6 flex items-center justify-center h-64 bg-muted/30">
-                <p className="text-muted-foreground">Interactive facility map with visitor locations would be displayed here</p>
+              <div className="relative border rounded-md p-6 flex items-center justify-center h-64 bg-muted/30">
+                <img 
+                  src="/lovable-uploads/4a63fe47-4d32-401d-ae4d-1d791ce296d6.png" 
+                  alt="Physical Security & Access Control Map" 
+                  className="absolute inset-0 w-full h-full object-contain opacity-50"
+                />
+                {selectedVisitor && (
+                  <div className="absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="h-4 w-4 rounded-full bg-red-500 animate-ping"></div>
+                    <div className="h-4 w-4 rounded-full bg-red-500 absolute top-0"></div>
+                  </div>
+                )}
+                <div className="z-10 bg-background/80 p-4 rounded-md">
+                  <p className="text-muted-foreground">
+                    {selectedVisitor ? 
+                      `Showing current location for ${mockVisitors.find(v => v.id === selectedVisitor)?.name}` : 
+                      "Select a visitor to view their location on the facility map"}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -172,20 +288,43 @@ const Visitors = () => {
         <div className="space-y-4">
           <Card className="glass">
             <CardHeader className="pb-2">
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  Quick Actions
+                </div>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
-                <QrCode className="mr-2 h-4 w-4" />
-                Scan QR Code
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={handleQrScan}
+                disabled={qrScanActive}
+              >
+                {qrScanActive ? (
+                  <>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                    Scanning...
+                  </>
+                ) : (
+                  <>
+                    <QrCode className="mr-2 h-4 w-4" />
+                    Scan QR Code
+                  </>
+                )}
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <User className="mr-2 h-4 w-4" />
+              <Button variant="outline" className="w-full justify-start" onClick={handleQuickCheckIn}>
+                <UserCheck className="mr-2 h-4 w-4" />
                 Quick Check-In
               </Button>
               <Button variant="outline" className="w-full justify-start">
                 <Calendar className="mr-2 h-4 w-4" />
                 Schedule Visit
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <History className="mr-2 h-4 w-4" />
+                Access Logs
               </Button>
             </CardContent>
           </Card>
