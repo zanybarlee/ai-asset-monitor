@@ -24,6 +24,9 @@ import InfrastructureManagement from "@/pages/power-management/InfrastructureMan
 import DailyOperations from "@/pages/DailyOperations";
 import TaskWorkflow from "@/pages/daily-operations/TaskWorkflow";
 import ScheduledReporting from "@/pages/daily-operations/ScheduledReporting";
+import HistoricalData from "@/pages/HistoricalData";
+import DataRepository from "@/pages/historical-data/DataRepository";
+import AuditTrails from "@/pages/historical-data/AuditTrails";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +60,10 @@ const App = () => (
               <Route path="operations" element={<DailyOperations />}>
                 <Route path="tasks" element={<TaskWorkflow />} />
                 <Route path="reporting" element={<ScheduledReporting />} />
+              </Route>
+              <Route path="historical" element={<HistoricalData />}>
+                <Route path="repository" element={<DataRepository />} />
+                <Route path="audit" element={<AuditTrails />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
