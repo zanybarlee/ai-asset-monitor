@@ -4,5 +4,6 @@ export interface NodeData {
   inputType?: string;
   required?: boolean;
   critical?: boolean;
+  id?: string;
   [key: string]: unknown; // Index signature to satisfy Record<string, unknown>
 }
