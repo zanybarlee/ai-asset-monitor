@@ -36,7 +36,7 @@ import Training from "@/pages/people-management/Training";
 import Scheduling from "@/pages/people-management/Scheduling";
 import Safety from "@/pages/people-management/Safety";
 import PlanningScheduling from "@/pages/PlanningScheduling";
-import Dashboard as PlanningDashboard from "@/pages/planning-scheduling/Dashboard";
+import PlanningDashboard from "@/pages/planning-scheduling/Dashboard";
 import Scheduler from "@/pages/planning-scheduling/Scheduler";
 import BacklogManagement from "@/pages/planning-scheduling/BacklogManagement";
 import ResourceOptimization from "@/pages/planning-scheduling/ResourceOptimization";
