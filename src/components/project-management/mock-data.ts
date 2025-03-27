@@ -1,6 +1,6 @@
-
 export type ProjectStatus = "Planning" | "Active" | "On Hold" | "Completed";
 export type ProjectType = "Upgrade" | "Expansion" | "Shutdown" | "Installation" | "Maintenance";
+export type MilestoneStatus = "Completed" | "On Track" | "At Risk" | "Delayed" | "In Progress";
 
 export interface Project {
   id: string;
@@ -27,7 +27,7 @@ export interface Project {
   milestones: {
     name: string;
     date: string;
-    status: "Completed" | "On Track" | "At Risk" | "Delayed";
+    status: MilestoneStatus;
     project: string;
   }[];
 }
@@ -274,7 +274,6 @@ export const mockProjects: Project[] = [
   }
 ];
 
-// Project stats for dashboard cards
 export const projectStats = {
   all: mockProjects.length,
   active: mockProjects.filter(p => p.status === "Active").length,
