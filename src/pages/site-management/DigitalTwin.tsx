@@ -1,7 +1,9 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Box, Layers, Component, Maximize2, Minimize2, RotateCcw } from "lucide-react";
+import { Box, Layers, Component } from "lucide-react";
+import DigitalTwinScene from "@/components/digital-twin/DigitalTwinScene";
 
 const DigitalTwin = () => {
   return (
@@ -13,28 +15,10 @@ const DigitalTwin = () => {
               <CardTitle>Digital Twin Visualization</CardTitle>
               <CardDescription>Real-time 3D representation of site assets</CardDescription>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <Maximize2 className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <Minimize2 className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <RotateCcw className="h-4 w-4" />
-              </Button>
-            </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="aspect-video relative bg-black/5 rounded-md flex items-center justify-center border">
-            <div className="text-center">
-              <Box className="h-12 w-12 mx-auto text-aramco-teal opacity-50 mb-2" />
-              <p className="text-muted-foreground">3D Digital Twin View</p>
-              <p className="text-xs text-muted-foreground mt-1">Interact with the 3D model to explore site assets</p>
-              <Button className="mt-4" variant="outline">Initialize 3D View</Button>
-            </div>
-          </div>
+          <DigitalTwinScene />
         </CardContent>
       </Card>
 
