@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, CheckCircle2, Clock, PlayCircle, Plus, Server, Server2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, PlayCircle, Plus, Server } from "lucide-react";
 
 const ProvisioningWorkflows = () => {
   // Mock data for provisioning workflows
@@ -99,7 +99,7 @@ const ProvisioningWorkflows = () => {
         <TabsContent value="active">
           {activeWorkflows.length === 0 ? (
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-8 text-center">
-              <Server2 className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
+              <Server className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">No Active Workflows</h3>
               <p className="text-muted-foreground mb-4">
                 There are no active provisioning workflows at the moment.
