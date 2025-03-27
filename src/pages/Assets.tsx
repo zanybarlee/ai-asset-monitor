@@ -2,7 +2,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-import { BookOpen, FileDown, Plus, Upload } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookOpen, FileDown, Plus, Upload, QrCode, Wrench, Thermometer, BarChart, ClipboardList } from "lucide-react";
 import { mockAssets, AssetType } from "@/components/assets/mockAssetData";
 
 import AssetMetricsCards from "@/components/assets/AssetMetricsCards";
@@ -13,6 +15,9 @@ import AssetQRCode from "@/components/assets/AssetQRCode";
 import BulkImportDialog from "@/components/assets/BulkImportDialog";
 import AssetMetricsDialog from "@/components/assets/AssetMetricsDialog";
 import CreateAssetDialog from "@/components/assets/CreateAssetDialog";
+import AssetLifecycleStages from "@/components/assets/AssetLifecycleStages";
+import AssetCBMThresholds from "@/components/assets/AssetCBMThresholds";
+import AssetMaintenanceTimeline from "@/components/assets/AssetMaintenanceTimeline";
 import { toast } from "sonner";
 
 const Assets = () => {
@@ -20,11 +25,15 @@ const Assets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const [selectedAsset, setSelectedAsset] = useState<AssetType | null>(null);
+  const [activeView, setActiveView] = useState("list");
   const [showAssetDetails, setShowAssetDetails] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [showMetrics, setShowMetrics] = useState(false);
   const [showCreateAsset, setShowCreateAsset] = useState(false);
+  const [showCBMSettings, setShowCBMSettings] = useState(false);
+  const [showLifecycleStages, setShowLifecycleStages] = useState(false);
+  const [showMaintenanceTimeline, setShowMaintenanceTimeline] = useState(false);
   
   const handleViewAsset = (asset: AssetType) => {
     setSelectedAsset(asset);
@@ -39,6 +48,7 @@ const Assets = () => {
   const handleCreateAsset = (newAsset: AssetType) => {
     setAssets([newAsset, ...assets]);
     setShowCreateAsset(false);
+    toast.success("Asset created successfully");
   };
 
   const handleExportAssets = () => {
@@ -78,7 +88,7 @@ const Assets = () => {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Asset Management</h2>
           <p className="text-muted-foreground">
-            Monitor and manage all data center equipment
+            Track, monitor, and manage data center equipment
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -103,44 +113,140 @@ const Assets = () => {
       
       <AssetMetricsCards assetCount={assets.length} />
       
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="md:w-1/4">
-          <AssetFilters 
-            searchQuery={searchQuery} 
-            onSearchChange={setSearchQuery} 
-          />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="md:col-span-1">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-md">Asset Management</CardTitle>
+            <CardDescription>Filter and find assets</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <AssetFilters 
+              searchQuery={searchQuery} 
+              onSearchChange={setSearchQuery} 
+            />
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium mb-1">Quick Actions</h3>
+              <div className="grid grid-cols-1 gap-2">
+                <Button variant="outline" size="sm" className="justify-start" onClick={() => setShowLifecycleStages(true)}>
+                  <ClipboardList className="mr-2 h-4 w-4" />
+                  Lifecycle Stages
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start" onClick={() => setShowCBMSettings(true)}>
+                  <Thermometer className="mr-2 h-4 w-4" />
+                  CBM Thresholds
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start" onClick={() => setShowMaintenanceTimeline(true)}>
+                  <BarChart className="mr-2 h-4 w-4" />
+                  Maintenance Timeline
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start">
+                  <Wrench className="mr-2 h-4 w-4" />
+                  Maintenance Schedule
+                </Button>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium mb-1">View Options</h3>
+              <Tabs defaultValue="list" value={activeView} onValueChange={setActiveView} className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="list">List</TabsTrigger>
+                  <TabsTrigger value="grid">Grid</TabsTrigger>
+                  <TabsTrigger value="tree">Tree</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </CardContent>
+        </Card>
         
-        <div className="md:w-3/4">
-          <AssetsList 
-            assets={assets}
-            searchQuery={searchQuery}
-            selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
-            onViewAsset={handleViewAsset}
-            onShowQRCode={handleShowQRCode}
-          />
+        <div className="md:col-span-3">
+          <Tabs defaultValue="all" value={selectedTab} onValueChange={setSelectedTab}>
+            <TabsContent value="all">
+              <AssetsList 
+                assets={assets}
+                searchQuery={searchQuery}
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+                onViewAsset={handleViewAsset}
+                onShowQRCode={handleShowQRCode}
+              />
+            </TabsContent>
+            
+            <TabsContent value="operational">
+              <AssetsList 
+                assets={assets}
+                searchQuery={searchQuery}
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+                onViewAsset={handleViewAsset}
+                onShowQRCode={handleShowQRCode}
+              />
+            </TabsContent>
+            
+            <TabsContent value="warning">
+              <AssetsList 
+                assets={assets}
+                searchQuery={searchQuery}
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+                onViewAsset={handleViewAsset}
+                onShowQRCode={handleShowQRCode}
+              />
+            </TabsContent>
+            
+            <TabsContent value="critical">
+              <AssetsList 
+                assets={assets}
+                searchQuery={searchQuery}
+                selectedTab={selectedTab}
+                setSelectedTab={setSelectedTab}
+                onViewAsset={handleViewAsset}
+                onShowQRCode={handleShowQRCode}
+              />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
       
+      {/* Asset Details Dialog */}
       <Dialog open={showAssetDetails} onOpenChange={setShowAssetDetails}>
         {selectedAsset && <AssetDetails asset={selectedAsset} />}
       </Dialog>
       
+      {/* QR Code Dialog */}
       <Dialog open={showQRCode} onOpenChange={setShowQRCode}>
         {selectedAsset && <AssetQRCode assetId={selectedAsset.id} assetName={selectedAsset.name} />}
       </Dialog>
       
+      {/* Bulk Import Dialog */}
       <Dialog open={showBulkImport} onOpenChange={setShowBulkImport}>
         <BulkImportDialog />
       </Dialog>
       
+      {/* Metrics Dialog */}
       <Dialog open={showMetrics} onOpenChange={setShowMetrics}>
         <AssetMetricsDialog />
       </Dialog>
       
+      {/* Create Asset Dialog */}
       <Dialog open={showCreateAsset} onOpenChange={setShowCreateAsset}>
         <CreateAssetDialog onAssetCreated={handleCreateAsset} />
+      </Dialog>
+      
+      {/* CBM Thresholds Dialog */}
+      <Dialog open={showCBMSettings} onOpenChange={setShowCBMSettings}>
+        <AssetCBMThresholds />
+      </Dialog>
+      
+      {/* Lifecycle Stages Dialog */}
+      <Dialog open={showLifecycleStages} onOpenChange={setShowLifecycleStages}>
+        <AssetLifecycleStages />
+      </Dialog>
+      
+      {/* Maintenance Timeline Dialog */}
+      <Dialog open={showMaintenanceTimeline} onOpenChange={setShowMaintenanceTimeline}>
+        <AssetMaintenanceTimeline />
       </Dialog>
     </div>
   );
