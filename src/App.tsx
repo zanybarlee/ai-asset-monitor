@@ -35,11 +35,16 @@ import Directory from "@/pages/people-management/Directory";
 import Training from "@/pages/people-management/Training";
 import Scheduling from "@/pages/people-management/Scheduling";
 import Safety from "@/pages/people-management/Safety";
+import PlanningScheduling from "@/pages/PlanningScheduling";
+import Dashboard as PlanningDashboard from "@/pages/planning-scheduling/Dashboard";
+import Scheduler from "@/pages/planning-scheduling/Scheduler";
+import BacklogManagement from "@/pages/planning-scheduling/BacklogManagement";
+import ResourceOptimization from "@/pages/planning-scheduling/ResourceOptimization";
+import ReportsAnalytics from "@/pages/planning-scheduling/ReportsAnalytics";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Fix: Move TooltipProvider into a component
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
@@ -82,6 +87,13 @@ const App = () => (
                 <Route path="training" element={<Training />} />
                 <Route path="scheduling" element={<Scheduling />} />
                 <Route path="safety" element={<Safety />} />
+              </Route>
+              <Route path="planning" element={<PlanningScheduling />}>
+                <Route path="dashboard" element={<PlanningDashboard />} />
+                <Route path="scheduler" element={<Scheduler />} />
+                <Route path="backlog" element={<BacklogManagement />} />
+                <Route path="resources" element={<ResourceOptimization />} />
+                <Route path="reports" element={<ReportsAnalytics />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
