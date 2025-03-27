@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssetType } from "./mockAssetData";
 import AssetFilters from "./AssetFilters";
 import AssetsList from "./AssetsList";
+import AssetQuickActions from "./AssetQuickActions"; // Add the missing import
 
 interface AssetsContentProps {
   assets: AssetType[];
@@ -63,6 +64,13 @@ const AssetsContent = ({
       
       <div className="md:col-span-3">
         <Tabs defaultValue="all" value={selectedTab} onValueChange={setSelectedTab}>
+          <TabsList className="grid grid-cols-4 mb-4">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="operational">Operational</TabsTrigger>
+            <TabsTrigger value="warning">Warning</TabsTrigger>
+            <TabsTrigger value="critical">Critical</TabsTrigger>
+          </TabsList>
+          
           <TabsContent value="all">
             <AssetsList 
               assets={assets}
