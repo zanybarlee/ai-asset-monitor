@@ -26,8 +26,16 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
+// Define node data type to ensure correct typing
+interface NodeData {
+  label: string;
+  inputType?: string;
+  required?: boolean;
+  critical?: boolean;
+}
+
 // Define initial nodes and edges
-const initialNodes: Node[] = [
+const initialNodes: Node<NodeData>[] = [
   {
     id: 'start',
     type: 'input',
@@ -63,7 +71,7 @@ interface WorkflowEditorProps {
 }
 
 const WorkflowEditor = ({ checklistItems, setChecklistItems }: WorkflowEditorProps) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   
@@ -79,7 +87,7 @@ const WorkflowEditor = ({ checklistItems, setChecklistItems }: WorkflowEditorPro
   const addNode = () => {
     if (!newTaskDescription || !newTaskInputType) return;
     
-    const newNode: Node = {
+    const newNode: Node<NodeData> = {
       id: `task-${Date.now()}`,
       data: { 
         label: newTaskDescription,
@@ -131,14 +139,14 @@ const WorkflowEditor = ({ checklistItems, setChecklistItems }: WorkflowEditorPro
   };
   
   const saveWorkflow = () => {
-    // Convert nodes to checklist items
+    // Convert nodes to checklist items with proper typing
     const items: ChecklistItem[] = nodes
       .filter(node => node.id !== 'start') // Skip the start node
       .map(node => ({
-        description: node.data.label,
-        inputType: node.data.inputType || 'Text',
-        required: node.data.required || true,
-        critical: node.data.critical || false
+        description: String(node.data.label || ''),
+        inputType: String(node.data.inputType || 'Text'),
+        required: Boolean(node.data.required),
+        critical: Boolean(node.data.critical)
       }));
     
     setChecklistItems(items);
