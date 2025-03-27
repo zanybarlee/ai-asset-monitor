@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Layout from "@/components/layout/Layout";
 import Dashboard from "@/pages/Dashboard";
@@ -17,7 +17,7 @@ import LocationManagement from "@/pages/LocationManagement";
 import SiteManagement from "@/pages/SiteManagement";
 import MEPEvaluation from "@/pages/site-management/MEPEvaluation";
 import DigitalTwin from "@/pages/site-management/DigitalTwin";
-import InventoryManagement from "@/pages/InventoryManagement"; // Updated import path
+import InventoryManagement from "@/pages/InventoryManagement"; // Using the top-level import
 import ProvisioningWorkflows from "@/pages/site-management/ProvisioningWorkflows";
 import PowerManagement from "@/pages/PowerManagement";
 import RealTimeMonitoring from "@/pages/power-management/RealTimeMonitoring";
@@ -72,11 +72,13 @@ const App = () => (
               <Route path="visitors" element={<Visitors />} />
               <Route path="settings" element={<Settings />} />
               <Route path="locations" element={<LocationManagement />} />
-              <Route path="inventory" element={<InventoryManagement />} /> {/* New top-level route */}
+              <Route path="inventory" element={<InventoryManagement />} />
               <Route path="sitemanagement" element={<SiteManagement />}>
                 <Route path="mep" element={<MEPEvaluation />} />
                 <Route path="digitaltwin" element={<DigitalTwin />} />
                 <Route path="provisioning" element={<ProvisioningWorkflows />} />
+                {/* Redirect from old inventory path to new top-level path */}
+                <Route path="inventory" element={<Navigate to="/inventory" replace />} />
               </Route>
               <Route path="power" element={<PowerManagement />}>
                 <Route path="monitoring" element={<RealTimeMonitoring />} />
