@@ -18,6 +18,7 @@ const SiteManagement = () => {
   // Determine which tab should be active based on the URL path
   const getActiveTab = () => {
     if (location.pathname.includes('/inventory')) return 'inventory';
+    if (location.pathname.includes('/provisioning')) return 'provisioning';
     if (location.pathname.includes('/mep')) return 'mep';
     if (location.pathname.includes('/digitaltwin')) return 'digitaltwin';
     return 'inventory'; // Default to Inventory tab
@@ -35,7 +36,10 @@ const SiteManagement = () => {
       <Tabs defaultValue="inventory" value={getActiveTab()} className="space-y-4">
         <TabsList>
           <TabsTrigger value="inventory" asChild>
-            <Link to="/sitemanagement/inventory">Provisioning & Inventory</Link>
+            <Link to="/sitemanagement/inventory">Inventory Management</Link>
+          </TabsTrigger>
+          <TabsTrigger value="provisioning" asChild>
+            <Link to="/sitemanagement/provisioning">Provisioning Workflows</Link>
           </TabsTrigger>
           <TabsTrigger value="mep" asChild>
             <Link to="/sitemanagement/mep">MEP Evaluation</Link>
