@@ -33,7 +33,7 @@ interface AssetsListProps {
   setSelectedTab: (tab: string) => void;
   onViewAsset: (asset: AssetType) => void;
   onShowQRCode: (asset: AssetType) => void;
-  activeView: string; // Add this prop to fix the type error
+  activeView: string; // This prop is now properly included in the interface
 }
 
 const AssetsList = ({ 
@@ -43,7 +43,7 @@ const AssetsList = ({
   setSelectedTab,
   onViewAsset,
   onShowQRCode,
-  activeView // Include this in function parameters
+  activeView
 }: AssetsListProps) => {
   const filteredAssets = assets.filter(asset => {
     const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -81,7 +81,7 @@ const AssetsList = ({
     }
   };
 
-  // Create view components based on activeView prop
+  // Render different views based on activeView prop
   const renderAssetView = () => {
     if (activeView === "list") {
       return (
@@ -261,6 +261,8 @@ const AssetsList = ({
               <Badge variant="outline" className="ml-2">{criticalCount}</Badge>
             </TabsTrigger>
           </TabsList>
+          
+          {/* Replace the error-causing code with a simple div to contain our asset view content */}
           <div className="mt-2">
             {renderAssetView()}
           </div>
