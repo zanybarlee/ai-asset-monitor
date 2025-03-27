@@ -1,7 +1,6 @@
-
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Cube, RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
+import { Box3D, RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface DigitalTwinSceneProps {
