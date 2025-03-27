@@ -32,13 +32,14 @@ import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Fix: Move TooltipProvider into a component
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+    <BrowserRouter>
+      <TooltipProvider>
         <SidebarProvider>
+          <Toaster />
+          <Sonner />
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Dashboard />} />
@@ -71,8 +72,8 @@ const App = () => (
             </Route>
           </Routes>
         </SidebarProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+      </TooltipProvider>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
