@@ -30,6 +30,11 @@ import HistoricalData from "@/pages/HistoricalData";
 import DataRepository from "@/pages/historical-data/DataRepository";
 import AuditTrails from "@/pages/historical-data/AuditTrails";
 import Workflows from "@/pages/Workflows";
+import PeopleManagement from "@/pages/PeopleManagement";
+import Directory from "@/pages/people-management/Directory";
+import Training from "@/pages/people-management/Training";
+import Scheduling from "@/pages/people-management/Scheduling";
+import Safety from "@/pages/people-management/Safety";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +76,12 @@ const App = () => (
               <Route path="historical" element={<HistoricalData />}>
                 <Route path="repository" element={<DataRepository />} />
                 <Route path="audit" element={<AuditTrails />} />
+              </Route>
+              <Route path="people" element={<PeopleManagement />}>
+                <Route path="directory" element={<Directory />} />
+                <Route path="training" element={<Training />} />
+                <Route path="scheduling" element={<Scheduling />} />
+                <Route path="safety" element={<Safety />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
