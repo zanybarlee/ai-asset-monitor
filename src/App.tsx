@@ -18,6 +18,7 @@ import SiteManagement from "@/pages/SiteManagement";
 import MEPEvaluation from "@/pages/site-management/MEPEvaluation";
 import DigitalTwin from "@/pages/site-management/DigitalTwin";
 import InventoryManagement from "@/pages/site-management/InventoryManagement";
+import ProvisioningWorkflows from "@/pages/site-management/ProvisioningWorkflows";
 import PowerManagement from "@/pages/PowerManagement";
 import RealTimeMonitoring from "@/pages/power-management/RealTimeMonitoring";
 import AutomatedReporting from "@/pages/power-management/AutomatedReporting";
@@ -75,6 +76,7 @@ const App = () => (
                 <Route path="mep" element={<MEPEvaluation />} />
                 <Route path="digitaltwin" element={<DigitalTwin />} />
                 <Route path="inventory" element={<InventoryManagement />} />
+                <Route path="provisioning" element={<ProvisioningWorkflows />} />
               </Route>
               <Route path="power" element={<PowerManagement />}>
                 <Route path="monitoring" element={<RealTimeMonitoring />} />
