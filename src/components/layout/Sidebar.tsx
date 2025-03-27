@@ -16,7 +16,7 @@ const Sidebar = () => {
     { name: "Assets", href: "/assets", icon: Box },
     { name: "Work Orders", href: "/workorders", icon: Clipboard },
     { name: "Maintenance", href: "/maintenance", icon: History },
-    { name: "Inventory Management", href: "/sitemanagement/inventory", icon: Package },
+    { name: "Inventory Management", href: "/inventory", icon: Package },
     { name: "Warranty Management", href: "/warranty", icon: ShieldCheck },
     { name: "Workflows", href: "/workflows", icon: ListChecks },
     { name: "Daily Operations", href: "/operations", icon: CalendarCheck },
