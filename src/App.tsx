@@ -13,6 +13,7 @@ import Maintenance from "@/pages/Maintenance";
 import Users from "@/pages/Users";
 import Visitors from "@/pages/Visitors";
 import Settings from "@/pages/Settings";
+import LocationManagement from "@/pages/LocationManagement";
 import SiteManagement from "@/pages/SiteManagement";
 import MEPEvaluation from "@/pages/site-management/MEPEvaluation";
 import DigitalTwin from "@/pages/site-management/DigitalTwin";
@@ -49,6 +50,7 @@ const App = () => (
               <Route path="users" element={<Users />} />
               <Route path="visitors" element={<Visitors />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="locations" element={<LocationManagement />} />
               <Route path="sitemanagement" element={<SiteManagement />}>
                 <Route path="mep" element={<MEPEvaluation />} />
                 <Route path="digitaltwin" element={<DigitalTwin />} />
