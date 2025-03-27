@@ -1,15 +1,15 @@
 
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 import { createServerRack, handleResize } from './utils/sceneHelpers';
 
 interface SceneInitializerProps {
   containerRef: React.RefObject<HTMLDivElement>;
-  sceneRef: React.RefObject<THREE.Scene>;
-  cameraRef: React.RefObject<THREE.PerspectiveCamera>;
-  rendererRef: React.RefObject<THREE.WebGLRenderer>;
-  animationFrameId: React.RefObject<number | null>;
-  initializedRef: React.RefObject<boolean>;
+  sceneRef: React.MutableRefObject<THREE.Scene | null>;
+  cameraRef: React.MutableRefObject<THREE.PerspectiveCamera | null>;
+  rendererRef: React.MutableRefObject<THREE.WebGLRenderer | null>;
+  animationFrameId: React.MutableRefObject<number | null>;
+  initializedRef: React.MutableRefObject<boolean>;
 }
 
 const SceneInitializer = ({
@@ -20,9 +20,6 @@ const SceneInitializer = ({
   animationFrameId,
   initializedRef
 }: SceneInitializerProps) => {
-  // Ref to track cleanup function
-  const cleanupRef = useRef<(() => void) | null>(null);
-
   useEffect(() => {
     if (!containerRef.current || initializedRef.current) return;
     
@@ -144,7 +141,8 @@ const SceneInitializer = ({
     
     // Animation function
     const animate = () => {
-      animationFrameId.current = requestAnimationFrame(animate);
+      const id = requestAnimationFrame(animate);
+      animationFrameId.current = id;
       
       if (rendererRef.current && sceneRef.current && cameraRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current);
@@ -158,7 +156,7 @@ const SceneInitializer = ({
     window.addEventListener('resize', () => handleResize(containerRef, cameraRef, rendererRef));
     
     // Cleanup function
-    cleanupRef.current = () => {
+    return () => {
       window.removeEventListener('resize', () => handleResize(containerRef, cameraRef, rendererRef));
       
       if (animationFrameId.current) {
@@ -167,12 +165,6 @@ const SceneInitializer = ({
       
       if (rendererRef.current && containerRef.current) {
         containerRef.current.removeChild(rendererRef.current.domElement);
-      }
-    };
-
-    return () => {
-      if (cleanupRef.current) {
-        cleanupRef.current();
       }
     };
   }, [containerRef, sceneRef, cameraRef, rendererRef, animationFrameId, initializedRef]);
