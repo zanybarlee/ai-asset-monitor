@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,9 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Search, Filter, Plus, ArrowUpDown, QrCode, FileDown } from "lucide-react";
+import { Search, Filter, Plus, ArrowUpDown, QrCode, FileDown, Upload, Clipboard, Tag, ChevronDown, HardDrive, BookOpen } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { BarChart, LineChart } from "@/components/ui/charts";
 
-// Mock data for assets
 const mockAssets = [
   {
     id: "AC-001",
@@ -19,6 +21,14 @@ const mockAssets = [
     lastMaintenance: "2023-05-15",
     nextMaintenance: "2023-11-15",
     location: "Server Room A",
+    mtbf: "4344 hrs",
+    mttr: "1.2 hrs",
+    sensors: ["temp-01", "humid-02"],
+    manufacturer: "Schneider Electric",
+    model: "ACRD1012A",
+    serialNumber: "SE-29384756",
+    installDate: "2021-08-15",
+    warrantyExpiry: "2026-08-15"
   },
   {
     id: "PS-002",
@@ -72,11 +82,34 @@ const mockAssets = [
   },
 ];
 
+const timeSeriesData = [
+  { month: "Jan", uptime: 720, downtime: 24 },
+  { month: "Feb", uptime: 672, downtime: 0 },
+  { month: "Mar", uptime: 744, downtime: 0 },
+  { month: "Apr", uptime: 720, downtime: 0 },
+  { month: "May", uptime: 744, downtime: 0 },
+  { month: "Jun", uptime: 720, downtime: 8 },
+];
+
+const failureData = [
+  { month: "Jan", failures: 3 },
+  { month: "Feb", failures: 2 },
+  { month: "Mar", failures: 1 },
+  { month: "Apr", failures: 0 },
+  { month: "May", failures: 3 },
+  { month: "Jun", failures: 1 },
+  { month: "Jul", failures: 2 },
+];
+
 const Assets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedAsset, setSelectedAsset] = useState<any>(null);
+  const [showAssetDetails, setShowAssetDetails] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [showBulkImport, setShowBulkImport] = useState(false);
+  const [showMetrics, setShowMetrics] = useState(false);
   
-  // Filter assets based on search query and selected tab
   const filteredAssets = mockAssets.filter(asset => {
     const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           asset.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -90,19 +123,16 @@ const Assets = () => {
     return matchesSearch;
   });
   
-  // Get counts for tabs
   const criticalCount = mockAssets.filter(a => a.status === "Critical").length;
   const warningCount = mockAssets.filter(a => a.status === "Warning").length;
   const operationalCount = mockAssets.filter(a => a.status === "Operational").length;
   
-  // Get health status color
   const getHealthColor = (health: number) => {
     if (health >= 85) return "text-emerald-500";
     if (health >= 60) return "text-amber-500";
     return "text-destructive";
   };
   
-  // Get status badge variant
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Operational":
@@ -126,15 +156,73 @@ const Assets = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowMetrics(true)}>
+            <BookOpen className="mr-2 h-4 w-4" />
+            Metrics
+          </Button>
           <Button variant="outline" size="sm">
             <FileDown className="mr-2 h-4 w-4" />
             Export
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setShowBulkImport(true)}>
+            <Upload className="mr-2 h-4 w-4" />
+            Bulk Import
           </Button>
           <Button size="sm">
             <Plus className="mr-2 h-4 w-4" />
             Add Asset
           </Button>
         </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="glass">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Assets Total</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl font-bold">{mockAssets.length}</span>
+              <span className="text-sm text-muted-foreground">Registered Devices</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="glass">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">MTBF</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl font-bold">4344</span>
+              <span className="text-sm text-muted-foreground">Hours</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="glass">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">MTTR</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl font-bold">24</span>
+              <span className="text-sm text-muted-foreground">Hours</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="glass">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Availability</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center">
+              <span className="text-4xl font-bold">99.45%</span>
+              <span className="text-sm text-muted-foreground">Uptime</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
       
       <div className="flex flex-col md:flex-row gap-4">
@@ -310,8 +398,24 @@ const Assets = () => {
                         </div>
                         <div>{getStatusBadge(asset.status)}</div>
                         <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm">View</Button>
-                          <Button variant="outline" size="icon">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => {
+                              setSelectedAsset(asset);
+                              setShowAssetDetails(true);
+                            }}
+                          >
+                            View
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            onClick={() => {
+                              setSelectedAsset(asset);
+                              setShowQRCode(true);
+                            }}
+                          >
                             <QrCode className="h-4 w-4" />
                           </Button>
                         </div>
@@ -341,6 +445,358 @@ const Assets = () => {
           </Card>
         </div>
       </div>
+      
+      <Dialog open={showAssetDetails} onOpenChange={setShowAssetDetails}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Asset Details</DialogTitle>
+            <DialogDescription>
+              View and manage complete asset information
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAsset && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Basic Information</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">ID:</span>
+                      <span className="font-medium">{selectedAsset.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Name:</span>
+                      <span className="font-medium">{selectedAsset.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Type:</span>
+                      <span>{selectedAsset.type}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Status:</span>
+                      <span>{getStatusBadge(selectedAsset.status)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Health:</span>
+                      <span className={getHealthColor(selectedAsset.health)}>{selectedAsset.health}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Location:</span>
+                      <span>{selectedAsset.location}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Maintenance Information</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Last Maintenance:</span>
+                      <span>{selectedAsset.lastMaintenance}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Next Maintenance:</span>
+                      <span>{selectedAsset.nextMaintenance}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">MTBF:</span>
+                      <span>{selectedAsset.mtbf}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">MTTR:</span>
+                      <span>{selectedAsset.mttr}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">IoT Sensors</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedAsset.sensors && selectedAsset.sensors.map((sensor: string) => (
+                      <Badge key={sensor} variant="outline" className="flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        {sensor}
+                      </Badge>
+                    ))}
+                    <Button variant="outline" size="sm" className="mt-2">
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add Sensor
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Technical Specifications</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Manufacturer:</span>
+                      <span>{selectedAsset.manufacturer}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Model:</span>
+                      <span>{selectedAsset.model}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Serial Number:</span>
+                      <span>{selectedAsset.serialNumber}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Install Date:</span>
+                      <span>{selectedAsset.installDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Warranty Expiry:</span>
+                      <span>{selectedAsset.warrantyExpiry}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Documentation</h3>
+                  <div className="space-y-2">
+                    <Button variant="outline" className="w-full justify-start">
+                      <FileDown className="mr-2 h-4 w-4" />
+                      User Manual
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      <FileDown className="mr-2 h-4 w-4" />
+                      Maintenance Log
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      <FileDown className="mr-2 h-4 w-4" />
+                      Warranty Certificate
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline">Generate Report</Button>
+            <Button>Edit Asset</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showQRCode} onOpenChange={setShowQRCode}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Asset QR Code</DialogTitle>
+            <DialogDescription>
+              Scan for quick access to asset information
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedAsset && (
+            <div className="flex flex-col items-center justify-center">
+              <div className="border border-dashed border-gray-300 p-6 rounded-lg">
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://aramco-cmms.com/assets/${selectedAsset.id}`}
+                  alt="Asset QR Code"
+                  className="w-48 h-48"
+                />
+              </div>
+              <p className="text-center mt-4 text-sm text-muted-foreground">
+                {selectedAsset.id}: {selectedAsset.name}
+              </p>
+              <div className="flex gap-2 mt-4">
+                <Button variant="outline" size="sm">
+                  <FileDown className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Clipboard className="mr-2 h-4 w-4" />
+                  Print
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showBulkImport} onOpenChange={setShowBulkImport}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Bulk Import Assets</DialogTitle>
+            <DialogDescription>
+              Upload a file to import multiple assets
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+              <p className="mt-2 text-sm text-muted-foreground">
+                Drag and drop your file here, or click to browse
+              </p>
+              <Button variant="outline" className="mt-4">
+                Select File
+              </Button>
+            </div>
+            
+            <div className="text-sm text-muted-foreground space-y-2">
+              <p>Accepted formats: .xlsx, .csv</p>
+              <p>Maximum file size: 10MB</p>
+              <Button variant="outline" size="sm" className="w-full">
+                <FileDown className="mr-2 h-4 w-4" />
+                Download Template
+              </Button>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowBulkImport(false)}>Cancel</Button>
+            <Button>Import Assets</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showMetrics} onOpenChange={setShowMetrics}>
+        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Asset Metrics & Analytics</DialogTitle>
+            <DialogDescription>
+              View detailed performance metrics and reliability data
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Breakdown Count</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col items-center">
+                    <span className="text-4xl font-bold">1</span>
+                    <span className="text-sm text-muted-foreground">Last 30 days</span>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">MTBF (Hours)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col items-center">
+                    <span className="text-4xl font-bold">4344</span>
+                    <span className="text-sm text-muted-foreground">Mean Time Between Failures</span>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Availability</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col items-center">
+                    <span className="text-4xl font-bold">99.45%</span>
+                    <span className="text-sm text-muted-foreground">System Uptime</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Up Time & Down Time (Hours)</CardTitle>
+                <CardDescription>Last 6 months</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <BarChart 
+                    data={timeSeriesData}
+                    index="month"
+                    categories={["uptime", "downtime"]}
+                    colors={["#10b981", "#f43f5e"]}
+                    valueFormatter={(value) => `${value} hrs`}
+                    showLegend={true}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Equipment Failures by Month</CardTitle>
+                <CardDescription>Last 7 months</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <BarChart 
+                    data={failureData}
+                    index="month"
+                    categories={["failures"]}
+                    colors={["#3b82f6"]}
+                    valueFormatter={(value) => `${value} failures`}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Detailed Statistics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Metric</TableHead>
+                      <TableHead>2023</TableHead>
+                      <TableHead>2024 YTD</TableHead>
+                      <TableHead>Change</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-medium">MTTR (hrs)</TableCell>
+                      <TableCell>4.2</TableCell>
+                      <TableCell>1.8</TableCell>
+                      <TableCell className="text-emerald-500">-57.1%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">MTBF (hrs)</TableCell>
+                      <TableCell>3120</TableCell>
+                      <TableCell>4344</TableCell>
+                      <TableCell className="text-emerald-500">+39.2%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Availability</TableCell>
+                      <TableCell>98.7%</TableCell>
+                      <TableCell>99.5%</TableCell>
+                      <TableCell className="text-emerald-500">+0.8%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Total Failures</TableCell>
+                      <TableCell>27</TableCell>
+                      <TableCell>6</TableCell>
+                      <TableCell className="text-emerald-500">-77.8%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium">Critical Failures</TableCell>
+                      <TableCell>8</TableCell>
+                      <TableCell>1</TableCell>
+                      <TableCell className="text-emerald-500">-87.5%</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline">Generate Report</Button>
+            <Button onClick={() => setShowMetrics(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
