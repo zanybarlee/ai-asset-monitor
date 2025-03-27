@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssetType } from "./mockAssetData";
 import AssetFilters from "./AssetFilters";
 import AssetsList from "./AssetsList";
-import AssetQuickActions from "./AssetQuickActions"; // Add the missing import
+import AssetQuickActions from "./AssetQuickActions";
 
 interface AssetsContentProps {
   assets: AssetType[];
