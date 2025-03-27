@@ -1,15 +1,16 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Dialog } from "@/components/ui/dialog";
 import { 
-  Search, QrCode, Calendar, Clock, User, Plus, Filter, 
+  Search, QrCode, Calendar, Clock, Plus, Filter, 
   Shield, MapPin, History, UserCheck, LogIn, LogOut
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import RegisterVisitorDialog from "@/components/visitors/RegisterVisitorDialog";
 
 const mockVisitors = [
   {
@@ -66,7 +67,6 @@ const mockVisitors = [
   }
 ];
 
-// Movement path data for each visitor
 const visitorMovements = {
   "V-1001": [
     { timestamp: "2023-08-12T09:30:00", zone: "Main Entrance", action: "Check In" },
@@ -95,6 +95,8 @@ const Visitors = () => {
   const [selectedVisitor, setSelectedVisitor] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("all");
   const [qrScanActive, setQrScanActive] = useState(false);
+  const [visitors, setVisitors] = useState(mockVisitors);
+  const [showRegisterVisitor, setShowRegisterVisitor] = useState(false);
 
   const formatDateTime = (timestamp: string | null) => {
     if (!timestamp) return "—";
@@ -118,7 +120,6 @@ const Visitors = () => {
   const handleQrScan = () => {
     setQrScanActive(true);
     
-    // Simulate a successful QR scan after 2 seconds
     setTimeout(() => {
       setQrScanActive(false);
       toast({
@@ -135,6 +136,11 @@ const Visitors = () => {
     });
   };
 
+  const handleVisitorRegistered = (newVisitor: any) => {
+    setVisitors([...visitors, newVisitor]);
+    setShowRegisterVisitor(false);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -144,7 +150,7 @@ const Visitors = () => {
             Physical Security & Access Control Module
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setShowRegisterVisitor(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Register Visitor
         </Button>
@@ -185,7 +191,7 @@ const Visitors = () => {
                 </div>
                 
                 <div className="divide-y">
-                  {mockVisitors.map((visitor) => (
+                  {visitors.map((visitor) => (
                     <div 
                       key={visitor.id} 
                       className={`grid grid-cols-6 p-3 text-sm items-center cursor-pointer hover:bg-muted/30 ${selectedVisitor === visitor.id ? 'bg-muted/30' : ''}`}
@@ -383,6 +389,10 @@ const Visitors = () => {
           </Card>
         </div>
       </div>
+
+      <Dialog open={showRegisterVisitor} onOpenChange={setShowRegisterVisitor}>
+        <RegisterVisitorDialog onVisitorRegistered={handleVisitorRegistered} />
+      </Dialog>
     </div>
   );
 };
