@@ -17,6 +17,7 @@ import '@xyflow/react/dist/style.css';
 import { ChecklistItem } from './workflow-types';
 import NodePanel from './workflow-editor/NodePanel';
 import ActionPanel from './workflow-editor/ActionPanel';
+import NodePropertiesPanel from './workflow-editor/NodePropertiesPanel';
 import { NodeData } from './workflow-editor/types';
 import { initialNodes, initialEdges, createNode, convertNodesToChecklistItems } from './workflow-editor/workflow-utils';
 
@@ -77,6 +78,26 @@ const WorkflowEditor = ({ checklistItems, setChecklistItems }: WorkflowEditorPro
     setChecklistItems(items);
   };
 
+  const updateNodeProperties = (nodeId: string, data: Partial<NodeData>) => {
+    setNodes((nds) => 
+      nds.map((node) => {
+        if (node.id === nodeId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              ...data
+            }
+          };
+        }
+        return node;
+      })
+    );
+  };
+
+  // Find the selected node
+  const selectedNode = nodes.find(node => node.id === selectedNodeId)?.data || null;
+
   return (
     <div className="h-[400px] border rounded-md">
       <ReactFlow
@@ -99,6 +120,11 @@ const WorkflowEditor = ({ checklistItems, setChecklistItems }: WorkflowEditorPro
         />
         
         <NodePanel addNode={addNode} />
+
+        <NodePropertiesPanel
+          selectedNode={selectedNode}
+          updateNodeProperties={updateNodeProperties}
+        />
       </ReactFlow>
     </div>
   );
