@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Filter, QrCode } from "lucide-react";
+import { Search, Filter, QrCode, LogIn, LogOut } from "lucide-react";
 
 interface Visitor {
   id: string;
@@ -31,6 +31,8 @@ interface VisitorsListProps {
   setActiveTab: (tab: string) => void;
   onQrScan: () => void;
   qrScanActive: boolean;
+  onCheckIn?: (visitorId: string) => void;
+  onCheckOut?: (visitorId: string) => void;
 }
 
 const VisitorsList = ({
@@ -40,7 +42,9 @@ const VisitorsList = ({
   activeTab,
   setActiveTab,
   onQrScan,
-  qrScanActive
+  qrScanActive,
+  onCheckIn,
+  onCheckOut
 }: VisitorsListProps) => {
   const formatDateTime = (timestamp: string | null) => {
     if (!timestamp) return "—";
@@ -86,19 +90,20 @@ const VisitorsList = ({
         </div>
         
         <div className="rounded-md border overflow-hidden">
-          <div className="grid grid-cols-6 bg-muted/50 p-3 text-sm font-medium">
+          <div className="grid grid-cols-7 bg-muted/50 p-3 text-sm font-medium">
             <div className="col-span-2">Visitor</div>
             <div>Host</div>
             <div>Check In</div>
             <div>Check Out</div>
             <div>Status</div>
+            <div>Actions</div>
           </div>
           
           <div className="divide-y">
             {visitors.map((visitor) => (
               <div 
                 key={visitor.id} 
-                className={`grid grid-cols-6 p-3 text-sm items-center cursor-pointer hover:bg-muted/30 ${selectedVisitor === visitor.id ? 'bg-muted/30' : ''}`}
+                className={`grid grid-cols-7 p-3 text-sm items-center cursor-pointer hover:bg-muted/30 ${selectedVisitor === visitor.id ? 'bg-muted/30' : ''}`}
                 onClick={() => onSelectVisitor(visitor.id)}
               >
                 <div className="col-span-2">
@@ -109,8 +114,26 @@ const VisitorsList = ({
                 <div>{visitor.host}</div>
                 <div>{visitor.checkIn ? formatDateTime(visitor.checkIn) : visitor.status === "Scheduled" ? formatDateTime(visitor.scheduledTime) : "—"}</div>
                 <div>{formatDateTime(visitor.checkOut)}</div>
+                <div>{getStatusBadge(visitor.status)}</div>
                 <div className="flex items-center gap-2">
-                  {getStatusBadge(visitor.status)}
+                  {visitor.status === "Scheduled" && onCheckIn && (
+                    <Button variant="outline" size="sm" className="flex items-center gap-1" onClick={(e) => {
+                      e.stopPropagation();
+                      onCheckIn(visitor.id);
+                    }}>
+                      <LogIn className="h-3 w-3" />
+                      Check In
+                    </Button>
+                  )}
+                  {visitor.status === "Active" && onCheckOut && (
+                    <Button variant="outline" size="sm" className="flex items-center gap-1" onClick={(e) => {
+                      e.stopPropagation();
+                      onCheckOut(visitor.id);
+                    }}>
+                      <LogOut className="h-3 w-3" />
+                      Check Out
+                    </Button>
+                  )}
                   {visitor.status === "Active" && (
                     <Button variant="outline" size="icon" className="h-6 w-6">
                       <QrCode className="h-3 w-3" />

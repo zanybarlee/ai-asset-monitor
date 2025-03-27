@@ -45,6 +45,46 @@ const Visitors = () => {
     setShowRegisterVisitor(false);
   };
 
+  const handleCheckIn = (visitorId: string) => {
+    const now = new Date().toISOString();
+    
+    setVisitors(visitors.map(visitor => {
+      if (visitor.id === visitorId) {
+        return {
+          ...visitor,
+          status: "Active",
+          checkIn: now
+        };
+      }
+      return visitor;
+    }));
+    
+    toast({
+      title: "Visitor Checked In",
+      description: `${visitors.find(v => v.id === visitorId)?.name} has been checked in successfully.`,
+    });
+  };
+
+  const handleCheckOut = (visitorId: string) => {
+    const now = new Date().toISOString();
+    
+    setVisitors(visitors.map(visitor => {
+      if (visitor.id === visitorId) {
+        return {
+          ...visitor,
+          status: "Completed",
+          checkOut: now
+        };
+      }
+      return visitor;
+    }));
+    
+    toast({
+      title: "Visitor Checked Out",
+      description: `${visitors.find(v => v.id === visitorId)?.name} has been checked out successfully.`,
+    });
+  };
+
   const selectedVisitorName = selectedVisitor 
     ? visitors.find(v => v.id === selectedVisitor)?.name || null
     : null;
@@ -84,6 +124,8 @@ const Visitors = () => {
             setActiveTab={setActiveTab}
             onQrScan={handleQrScan}
             qrScanActive={qrScanActive}
+            onCheckIn={handleCheckIn}
+            onCheckOut={handleCheckOut}
           />
           
           {selectedVisitor && (
