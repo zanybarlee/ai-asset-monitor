@@ -32,6 +32,7 @@ interface NodeData {
   inputType?: string;
   required?: boolean;
   critical?: boolean;
+  [key: string]: unknown; // Add index signature to satisfy Record<string, unknown>
 }
 
 // Define initial nodes and edges
