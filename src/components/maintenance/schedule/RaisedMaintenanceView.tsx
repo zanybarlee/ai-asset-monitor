@@ -14,30 +14,23 @@ import {
   AlertCircle, 
   ClipboardList, 
   ListChecks, 
-  CheckCircle 
+  CheckCircle,
+  MessageCircle 
 } from "lucide-react";
-
-interface MaintenanceTask {
-  id: string;
-  title: string;
-  location: string;
-  asset: string;
-  assignee: string;
-  dueDate: string;
-  status: string;
-  priority: string;
-}
+import { MaintenanceTask } from "./maintenance-data";
 
 interface RaisedMaintenanceViewProps {
   pendingTasks: MaintenanceTask[];
   involvedTasks: MaintenanceTask[];
   onViewChecklist: (task: MaintenanceTask) => void;
+  onRespondToTask: (task: MaintenanceTask) => void;
 }
 
 const RaisedMaintenanceView = ({ 
   pendingTasks, 
   involvedTasks, 
-  onViewChecklist 
+  onViewChecklist,
+  onRespondToTask
 }: RaisedMaintenanceViewProps) => {
   const [raisedSmTab, setRaisedSmTab] = useState("pending");
 
@@ -106,15 +99,32 @@ const RaisedMaintenanceView = ({
                     </div>
                   </div>
                   <div className="flex gap-2 mt-2 md:mt-0">
-                    <Button size="sm" onClick={() => onViewChecklist(item)}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => onViewChecklist(item)}
+                    >
                       <ListChecks className="mr-2 h-4 w-4" />
-                      Complete Checklist
+                      View Checklist
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      onClick={() => onRespondToTask(item)}
+                    >
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Respond
                     </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+          
+          {pendingTasks.length === 0 && (
+            <div className="flex items-center justify-center p-8 bg-muted/30 rounded-lg">
+              <p className="text-muted-foreground">No pending tasks available.</p>
+            </div>
+          )}
         </div>
       </TabsContent>
       
@@ -159,7 +169,7 @@ const RaisedMaintenanceView = ({
                     </div>
                   </div>
                   <div className="flex gap-2 mt-2 md:mt-0">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => onViewChecklist(item)}>
                       <ClipboardList className="mr-2 h-4 w-4" />
                       View Details
                     </Button>
@@ -168,6 +178,12 @@ const RaisedMaintenanceView = ({
               </CardContent>
             </Card>
           ))}
+          
+          {involvedTasks.length === 0 && (
+            <div className="flex items-center justify-center p-8 bg-muted/30 rounded-lg">
+              <p className="text-muted-foreground">No involved tasks available.</p>
+            </div>
+          )}
         </div>
       </TabsContent>
     </Tabs>

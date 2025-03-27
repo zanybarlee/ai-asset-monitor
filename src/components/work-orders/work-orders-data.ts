@@ -1,27 +1,10 @@
 
-export interface WorkOrder {
-  id: string;
-  title: string;
-  priority: string;
-  status: string;
-  assignee: string;
-  dueDate: string;
-  createdAt: string;
-  description: string;
-  facility?: string;
-  location?: string;
-  asset?: string;
-  parts?: Part[];
-  laborTasks?: LaborTask[];
-  costTotal?: number;
-}
-
 export interface Part {
   id: string;
   name: string;
   partNumber: string;
-  quantity: number;
   unitCost: number;
+  quantity: number;
   total: number;
 }
 
@@ -34,290 +17,188 @@ export interface LaborTask {
   total: number;
 }
 
-export interface Technician {
+export interface WorkOrder {
   id: string;
-  name: string;
-  specialty: string;
-  email: string;
-  phone: string;
-  available: boolean;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  createdAt: string;
+  dueDate: string;
+  assignee: string;
+  createdBy: string;
+  location?: string;
+  asset?: string;
+  parts?: Part[];
+  laborTasks?: LaborTask[];
+  costTotal?: number;
+  attachments?: string[];
 }
+
+export const technicians = [
+  { id: "tech-001", name: "John Smith", specialty: "HVAC", available: true },
+  { id: "tech-002", name: "Sarah Johnson", specialty: "Electrical", available: true },
+  { id: "tech-003", name: "Michael Brown", specialty: "Plumbing", available: false },
+  { id: "tech-004", name: "Emily Davis", specialty: "General", available: true },
+  { id: "tech-005", name: "Robert Wilson", specialty: "Security", available: true },
+  { id: "tech-006", name: "Jennifer Thompson", specialty: "IT", available: false },
+];
+
+export const dataCenterParts = [
+  { id: "part-001", name: "Air Filter", partNumber: "AF-2340", unitCost: 45.99 },
+  { id: "part-002", name: "Cooling Fan", partNumber: "CF-1200", unitCost: 89.50 },
+  { id: "part-003", name: "Power Supply", partNumber: "PS-5500", unitCost: 129.99 },
+  { id: "part-004", name: "Network Cable", partNumber: "NC-CAT6E", unitCost: 12.75 },
+  { id: "part-005", name: "UPS Battery", partNumber: "UPB-1500", unitCost: 199.00 },
+  { id: "part-006", name: "Server Rail Kit", partNumber: "SRK-R720", unitCost: 65.50 },
+  { id: "part-007", name: "Memory Module", partNumber: "MEM-16GB", unitCost: 87.25 },
+  { id: "part-008", name: "Hard Drive", partNumber: "HD-2TB-SAS", unitCost: 175.00 },
+];
 
 export const mockOrders: WorkOrder[] = [
   {
     id: "WO-1001",
-    title: "HVAC Maintenance Check",
+    title: "HVAC Maintenance in Server Room",
+    description: "Perform routine maintenance on HVAC system in the main server room.",
+    status: "In Progress",
     priority: "High",
-    status: "Open",
-    assignee: "John Doe",
-    dueDate: "2023-08-18",
-    createdAt: "2023-08-10",
-    description: "Perform routine maintenance check on the HVAC system in Server Room A.",
-    facility: "Main Data Center",
-    location: "Server Room A",
-    asset: "CRAC Unit 01",
+    createdAt: "2023-05-10T08:30:00Z",
+    dueDate: "2023-05-17T17:00:00Z",
+    assignee: "John Smith",
+    createdBy: "Admin User",
+    location: "Data Center - Floor 1",
+    asset: "HVAC-001",
     parts: [
       {
-        id: "P1001",
+        id: "part-001",
         name: "Air Filter",
-        partNumber: "AF-2023-4",
-        quantity: 2,
+        partNumber: "AF-2340",
         unitCost: 45.99,
+        quantity: 2,
         total: 91.98
+      },
+      {
+        id: "part-002",
+        name: "Cooling Fan",
+        partNumber: "CF-1200",
+        unitCost: 89.50,
+        quantity: 1,
+        total: 89.50
       }
     ],
     laborTasks: [
       {
-        id: "L1001",
-        description: "HVAC System Inspection",
-        assignedTo: "John Doe",
+        id: "labor-001",
+        description: "HVAC Inspection",
+        assignedTo: "John Smith",
         estimatedHours: 2,
         hourlyRate: 75,
         total: 150
       }
     ],
-    costTotal: 241.98
+    costTotal: 331.48
   },
   {
     id: "WO-1002",
-    title: "Power Supply Inspection",
+    title: "UPS Battery Replacement",
+    description: "Replace failing UPS batteries in the electrical room.",
+    status: "Open",
     priority: "Critical",
-    status: "In Progress",
-    assignee: "Sarah Johnson",
-    dueDate: "2023-08-15",
-    createdAt: "2023-08-09",
-    description: "Inspect and test the backup power supply systems following recent power fluctuations.",
-    facility: "Main Data Center",
-    location: "Power Room",
-    asset: "UPS System 02",
+    createdAt: "2023-05-11T10:15:00Z",
+    dueDate: "2023-05-13T17:00:00Z",
+    assignee: "Current User",
+    createdBy: "System Alert",
+    location: "Data Center - Floor 1",
+    asset: "UPS-002",
     parts: [
       {
-        id: "P1002",
+        id: "part-005",
         name: "UPS Battery",
-        partNumber: "UB-500-12",
-        quantity: 1,
-        unitCost: 350,
-        total: 350
+        partNumber: "UPB-1500",
+        unitCost: 199.00,
+        quantity: 3,
+        total: 597.00
       }
     ],
-    laborTasks: [
-      {
-        id: "L1002",
-        description: "UPS Inspection and Testing",
-        assignedTo: "Sarah Johnson",
-        estimatedHours: 3,
-        hourlyRate: 85,
-        total: 255
-      }
-    ],
-    costTotal: 605
+    costTotal: 597.00
   },
   {
     id: "WO-1003",
-    title: "Fire Suppression Test",
-    priority: "Medium",
+    title: "Network Cable Replacement",
+    description: "Replace damaged network cables between racks B4 and B5.",
     status: "Completed",
-    assignee: "Mike Brown",
-    dueDate: "2023-08-12",
-    createdAt: "2023-08-05",
-    description: "Conduct quarterly testing of the fire suppression system in Server Room B.",
-    facility: "Main Data Center",
-    location: "Server Room B",
-    asset: "FM-200 System",
-    laborTasks: [
+    priority: "Medium",
+    createdAt: "2023-05-08T13:45:00Z",
+    dueDate: "2023-05-10T17:00:00Z",
+    assignee: "Sarah Johnson",
+    createdBy: "Current User",
+    location: "Data Center - Floor 2",
+    asset: "RACK-B4",
+    parts: [
       {
-        id: "L1003",
-        description: "Fire Suppression System Test",
-        assignedTo: "Mike Brown",
-        estimatedHours: 4,
-        hourlyRate: 90,
-        total: 360
+        id: "part-004",
+        name: "Network Cable",
+        partNumber: "NC-CAT6E",
+        unitCost: 12.75,
+        quantity: 10,
+        total: 127.50
       }
     ],
-    costTotal: 360
+    laborTasks: [
+      {
+        id: "labor-002",
+        description: "Cable Installation",
+        assignedTo: "Sarah Johnson",
+        estimatedHours: 1.5,
+        hourlyRate: 65,
+        total: 97.50
+      }
+    ],
+    costTotal: 225.00
   },
   {
     id: "WO-1004",
-    title: "Replace UPS Batteries",
-    priority: "High",
+    title: "Server Hardware Upgrade",
+    description: "Upgrade memory and storage in production servers.",
     status: "Open",
-    assignee: "Unassigned",
-    dueDate: "2023-08-20",
-    createdAt: "2023-08-11",
-    description: "Replace batteries in the UPS system that are showing signs of degradation.",
-    facility: "Backup Data Center",
-    location: "Power Room",
-    asset: "UPS System 04",
+    priority: "High",
+    createdAt: "2023-05-12T09:30:00Z",
+    dueDate: "2023-05-19T17:00:00Z",
+    assignee: "Current User",
+    createdBy: "Project Manager",
+    location: "Data Center - Floor 2",
+    asset: "SRV-PROD-04",
     parts: [
       {
-        id: "P1003",
-        name: "UPS Battery Pack",
-        partNumber: "UBP-2000",
-        quantity: 4,
-        unitCost: 420,
-        total: 1680
+        id: "part-007",
+        name: "Memory Module",
+        partNumber: "MEM-16GB",
+        unitCost: 87.25,
+        quantity: 8,
+        total: 698.00
       },
       {
-        id: "P1004",
-        name: "Battery Cables",
-        partNumber: "BC-100",
-        quantity: 8,
-        unitCost: 15,
-        total: 120
+        id: "part-008",
+        name: "Hard Drive",
+        partNumber: "HD-2TB-SAS",
+        unitCost: 175.00,
+        quantity: 4,
+        total: 700.00
       }
     ],
-    costTotal: 1800
+    costTotal: 1398.00
   },
   {
     id: "WO-1005",
-    title: "Network Switch Installation",
-    priority: "Medium",
+    title: "Car Door Issue",
+    description: "Car door won't close properly, requires inspection and repair.",
     status: "In Progress",
-    assignee: "Alex Chen",
-    dueDate: "2023-08-17",
-    createdAt: "2023-08-08",
-    description: "Install new network switches in Rack 5 to expand capacity.",
-    facility: "Main Data Center",
-    location: "Network Room",
-    asset: "Rack 5",
-    parts: [
-      {
-        id: "P1005",
-        name: "Network Switch",
-        partNumber: "NS-10G-48P",
-        quantity: 2,
-        unitCost: 2250,
-        total: 4500
-      },
-      {
-        id: "P1006",
-        name: "Fiber Patch Cables",
-        partNumber: "FPC-5M",
-        quantity: 24,
-        unitCost: 35,
-        total: 840
-      }
-    ],
-    laborTasks: [
-      {
-        id: "L1004",
-        description: "Switch Installation and Configuration",
-        assignedTo: "Alex Chen",
-        estimatedHours: 6,
-        hourlyRate: 95,
-        total: 570
-      }
-    ],
-    costTotal: 5910
-  }
-];
-
-export const technicians: Technician[] = [
-  {
-    id: "T1001",
-    name: "John Doe",
-    specialty: "HVAC Systems",
-    email: "john.doe@example.com",
-    phone: "555-123-4567",
-    available: true
-  },
-  {
-    id: "T1002",
-    name: "Sarah Johnson",
-    specialty: "Power Systems",
-    email: "sarah.johnson@example.com",
-    phone: "555-234-5678",
-    available: true
-  },
-  {
-    id: "T1003",
-    name: "Mike Brown",
-    specialty: "Fire Safety Systems",
-    email: "mike.brown@example.com",
-    phone: "555-345-6789",
-    available: false
-  },
-  {
-    id: "T1004",
-    name: "Alex Chen",
-    specialty: "Network Infrastructure",
-    email: "alex.chen@example.com",
-    phone: "555-456-7890",
-    available: true
-  },
-  {
-    id: "T1005",
-    name: "Lisa Wong",
-    specialty: "Cooling Systems",
-    email: "lisa.wong@example.com",
-    phone: "555-567-8901",
-    available: true
-  }
-];
-
-export const dataCenterParts: Part[] = [
-  {
-    id: "P1001",
-    name: "Air Filter",
-    partNumber: "AF-2023-4",
-    quantity: 25,
-    unitCost: 45.99,
-    total: 1149.75
-  },
-  {
-    id: "P1002",
-    name: "UPS Battery",
-    partNumber: "UB-500-12",
-    quantity: 12,
-    unitCost: 350,
-    total: 4200
-  },
-  {
-    id: "P1003",
-    name: "UPS Battery Pack",
-    partNumber: "UBP-2000",
-    quantity: 8,
-    unitCost: 420,
-    total: 3360
-  },
-  {
-    id: "P1004",
-    name: "Battery Cables",
-    partNumber: "BC-100",
-    quantity: 50,
-    unitCost: 15,
-    total: 750
-  },
-  {
-    id: "P1005",
-    name: "Network Switch",
-    partNumber: "NS-10G-48P",
-    quantity: 4,
-    unitCost: 2250,
-    total: 9000
-  },
-  {
-    id: "P1006",
-    name: "Fiber Patch Cables",
-    partNumber: "FPC-5M",
-    quantity: 100,
-    unitCost: 35,
-    total: 3500
-  },
-  {
-    id: "P1007",
-    name: "HVAC Coolant",
-    partNumber: "HC-R410A",
-    quantity: 5,
-    unitCost: 120,
-    total: 600
-  },
-  {
-    id: "P1008",
-    name: "Server Rack Fan",
-    partNumber: "SRF-120MM",
-    quantity: 20,
-    unitCost: 45,
-    total: 900
+    priority: "Medium",
+    createdAt: "2023-05-14T11:20:00Z",
+    dueDate: "2023-05-16T17:00:00Z",
+    assignee: "Current User",
+    createdBy: "Facility Manager",
+    location: "Parking Garage - Level B1",
+    asset: "VEH-COMP-112"
   }
 ];

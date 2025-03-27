@@ -3,20 +3,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { WorkOrder } from "./work-orders-data";
-import { Wrench } from "lucide-react";
+import { Wrench, Eye } from "lucide-react";
 
 interface WorkOrdersListProps {
   orders: WorkOrder[];
   getStatusColor: (status: string) => string;
   getPriorityColor: (priority: string) => string;
   getStatusIcon: (status: string) => React.ReactNode;
+  onViewDetails: (orderId: string) => void;
 }
 
 const WorkOrdersList = ({ 
   orders, 
   getStatusColor, 
   getPriorityColor, 
-  getStatusIcon 
+  getStatusIcon,
+  onViewDetails
 }: WorkOrdersListProps) => {
   return (
     <div className="grid gap-4">
@@ -66,7 +68,10 @@ const WorkOrdersList = ({
                       Dispatch
                     </Button>
                   )}
-                  <Button variant="outline" size="sm">View Details</Button>
+                  <Button variant="outline" size="sm" onClick={() => onViewDetails(order.id)}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    View Details
+                  </Button>
                 </div>
               </div>
 

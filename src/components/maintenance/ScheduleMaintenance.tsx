@@ -12,11 +12,13 @@ import {
   involvedTasks,
   MaintenanceTask
 } from "./schedule/maintenance-data";
+import MaintenanceResponseDialog from "./MaintenanceResponseDialog";
 
 const ScheduleMaintenance = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<MaintenanceTask | null>(null);
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
+  const [isResponseDialogOpen, setIsResponseDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("sm-list");
 
   const handleScheduleNew = () => {
@@ -26,6 +28,11 @@ const ScheduleMaintenance = () => {
   const handleViewChecklist = (task: MaintenanceTask) => {
     setSelectedTask(task);
     setIsChecklistOpen(true);
+  };
+  
+  const handleRespondToTask = (task: MaintenanceTask) => {
+    setSelectedTask(task);
+    setIsResponseDialogOpen(true);
   };
 
   return (
@@ -43,6 +50,7 @@ const ScheduleMaintenance = () => {
             maintenanceList={scheduledMaintenanceList}
             onScheduleNew={handleScheduleNew}
             onViewChecklist={handleViewChecklist}
+            onRespondToTask={handleRespondToTask}
           />
         </TabsContent>
         
@@ -52,6 +60,7 @@ const ScheduleMaintenance = () => {
             pendingTasks={pendingTasks}
             involvedTasks={involvedTasks}
             onViewChecklist={handleViewChecklist}
+            onRespondToTask={handleRespondToTask}
           />
         </TabsContent>
         
@@ -69,6 +78,15 @@ const ScheduleMaintenance = () => {
         <MaintenanceChecklist 
           open={isChecklistOpen} 
           onClose={() => setIsChecklistOpen(false)} 
+          task={selectedTask}
+        />
+      )}
+      
+      {/* Maintenance Response Dialog */}
+      {isResponseDialogOpen && selectedTask && (
+        <MaintenanceResponseDialog
+          open={isResponseDialogOpen}
+          onClose={() => setIsResponseDialogOpen(false)}
           task={selectedTask}
         />
       )}

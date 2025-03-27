@@ -8,12 +8,16 @@ import { Plus, Filter, Check, Clock, AlertTriangle, Wrench } from "lucide-react"
 import { mockOrders } from "@/components/work-orders/work-orders-data";
 import WorkOrdersList from "@/components/work-orders/WorkOrdersList";
 import WorkOrderForm from "@/components/work-orders/WorkOrderForm";
+import WorkOrderDetails from "@/components/work-orders/WorkOrderDetails";
 import { useToast } from "@/hooks/use-toast";
 
 const WorkOrders = () => {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [filterTab, setFilterTab] = useState("all");
+  const [taskFilter, setTaskFilter] = useState("involved");
   
   const handleCreateWorkOrder = () => {
     setIsFormOpen(true);
@@ -21,6 +25,16 @@ const WorkOrders = () => {
 
   const handleCloseForm = () => {
     setIsFormOpen(false);
+  };
+
+  const handleViewDetails = (orderId: string) => {
+    setSelectedOrderId(orderId);
+    setIsDetailsOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedOrderId(null);
   };
 
   const handleGenerateFromAlert = () => {
@@ -73,9 +87,21 @@ const WorkOrders = () => {
     }
   };
 
+  // Filter orders based on both status tab and task type (pending/involved)
   const filteredOrders = mockOrders.filter(order => {
-    if (filterTab === "all") return true;
-    return order.status.toLowerCase().replace(/\s+/g, '') === filterTab;
+    // First filter by status tab
+    if (filterTab !== "all" && order.status.toLowerCase().replace(/\s+/g, '') !== filterTab) {
+      return false;
+    }
+    
+    // Then filter by task type (pending/involved)
+    if (taskFilter === "pending") {
+      return order.assignee === "Current User" && order.status !== "Completed";
+    } else if (taskFilter === "involved") {
+      return order.createdBy === "Current User" || order.status === "Completed";
+    }
+    
+    return true;
   });
 
   return (
@@ -107,19 +133,29 @@ const WorkOrders = () => {
           <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="all" className="space-y-4 mt-4">
-          <div className="flex justify-end">
-            <Button variant="outline" size="sm">
-              <Filter className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
-          </div>
+        <div className="flex justify-between items-center mt-4">
+          <select 
+            className="bg-background border rounded-md p-2 text-sm"
+            value={taskFilter}
+            onChange={(e) => setTaskFilter(e.target.value)}
+          >
+            <option value="involved">Involved Tasks</option>
+            <option value="pending">Pending Tasks</option>
+          </select>
           
+          <Button variant="outline" size="sm">
+            <Filter className="mr-2 h-4 w-4" />
+            Filter
+          </Button>
+        </div>
+        
+        <TabsContent value="all" className="space-y-4 mt-4">
           <WorkOrdersList 
             orders={filteredOrders} 
             getStatusColor={getStatusColor} 
             getPriorityColor={getPriorityColor} 
-            getStatusIcon={getStatusIcon} 
+            getStatusIcon={getStatusIcon}
+            onViewDetails={handleViewDetails}
           />
         </TabsContent>
         
@@ -128,7 +164,8 @@ const WorkOrders = () => {
             orders={filteredOrders} 
             getStatusColor={getStatusColor} 
             getPriorityColor={getPriorityColor} 
-            getStatusIcon={getStatusIcon} 
+            getStatusIcon={getStatusIcon}
+            onViewDetails={handleViewDetails} 
           />
         </TabsContent>
         
@@ -137,7 +174,8 @@ const WorkOrders = () => {
             orders={filteredOrders} 
             getStatusColor={getStatusColor} 
             getPriorityColor={getPriorityColor} 
-            getStatusIcon={getStatusIcon} 
+            getStatusIcon={getStatusIcon}
+            onViewDetails={handleViewDetails} 
           />
         </TabsContent>
         
@@ -146,12 +184,21 @@ const WorkOrders = () => {
             orders={filteredOrders} 
             getStatusColor={getStatusColor} 
             getPriorityColor={getPriorityColor} 
-            getStatusIcon={getStatusIcon} 
+            getStatusIcon={getStatusIcon}
+            onViewDetails={handleViewDetails} 
           />
         </TabsContent>
       </Tabs>
 
       {isFormOpen && <WorkOrderForm open={isFormOpen} onClose={handleCloseForm} />}
+      
+      {isDetailsOpen && selectedOrderId && (
+        <WorkOrderDetails 
+          open={isDetailsOpen} 
+          onClose={handleCloseDetails} 
+          orderId={selectedOrderId} 
+        />
+      )}
     </div>
   );
 };
