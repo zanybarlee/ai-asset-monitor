@@ -1,3 +1,5 @@
+
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,6 +7,8 @@ import { Box, Layers, Component } from "lucide-react";
 import DigitalTwinScene from "@/components/digital-twin/DigitalTwinScene";
 
 const DigitalTwin = () => {
+  const [activeTab, setActiveTab] = useState("floor1");
+
   return (
     <div className="space-y-6">
       <Card>
@@ -17,7 +21,7 @@ const DigitalTwin = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <DigitalTwinScene />
+          <DigitalTwinScene activeFloor={activeTab} />
         </CardContent>
       </Card>
 
@@ -51,7 +55,7 @@ const DigitalTwin = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="floor1" className="space-y-4">
+      <Tabs defaultValue="floor1" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="floor1">Floor 1</TabsTrigger>
           <TabsTrigger value="floor2">Floor 2</TabsTrigger>
@@ -69,7 +73,7 @@ const DigitalTwin = () => {
                 <div className="bg-muted rounded-md aspect-video relative flex items-center justify-center">
                   <Layers className="h-8 w-8 text-aramco-teal opacity-50" />
                   <div className="absolute bottom-2 right-2">
-                    <Button variant="outline" size="sm">View In 3D</Button>
+                    <Button variant="outline" size="sm" onClick={() => setActiveTab("floor1")}>View In 3D</Button>
                   </div>
                 </div>
                 <div className="space-y-4">
@@ -106,6 +110,102 @@ const DigitalTwin = () => {
             </CardContent>
           </Card>
         </TabsContent>
+        <TabsContent value="floor2" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Floor 2 - Administration</CardTitle>
+              <CardDescription>Administrative offices and meeting rooms</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-muted rounded-md aspect-video relative flex items-center justify-center">
+                  <Layers className="h-8 w-8 text-aramco-teal opacity-50" />
+                  <div className="absolute bottom-2 right-2">
+                    <Button variant="outline" size="sm" onClick={() => setActiveTab("floor2")}>View In 3D</Button>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium mb-1">Asset Summary</h4>
+                    <ul className="text-sm space-y-1">
+                      <li className="flex justify-between">
+                        <span>Office Workstations</span>
+                        <span>36</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Conference Rooms</span>
+                        <span>4</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Office Equipment</span>
+                        <span>52</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Communication Systems</span>
+                        <span>8</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-1">Current Status</h4>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <span className="text-sm">All systems operational</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="floor3" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Floor 3 - Research & Development</CardTitle>
+              <CardDescription>R&D labs and testing facilities</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="bg-muted rounded-md aspect-video relative flex items-center justify-center">
+                  <Layers className="h-8 w-8 text-aramco-teal opacity-50" />
+                  <div className="absolute bottom-2 right-2">
+                    <Button variant="outline" size="sm" onClick={() => setActiveTab("floor3")}>View In 3D</Button>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium mb-1">Asset Summary</h4>
+                    <ul className="text-sm space-y-1">
+                      <li className="flex justify-between">
+                        <span>Testing Equipment</span>
+                        <span>28</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Development Workstations</span>
+                        <span>24</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Prototype Models</span>
+                        <span>12</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span>Research Systems</span>
+                        <span>16</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-1">Current Status</h4>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                      <span className="text-sm">Maintenance in progress on 2 systems</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         <TabsContent value="serverRoom">
           <Card>
             <CardHeader>
@@ -117,7 +217,7 @@ const DigitalTwin = () => {
                 <div className="bg-muted rounded-md aspect-video relative flex items-center justify-center">
                   <Component className="h-8 w-8 text-aramco-teal opacity-50" />
                   <div className="absolute bottom-2 right-2">
-                    <Button variant="outline" size="sm">View In 3D</Button>
+                    <Button variant="outline" size="sm" onClick={() => setActiveTab("serverRoom")}>View In 3D</Button>
                   </div>
                 </div>
                 <div className="space-y-4">
@@ -163,16 +263,6 @@ const DigitalTwin = () => {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-        <TabsContent value="floor2">
-          <div className="flex items-center justify-center h-40 border rounded-md bg-muted">
-            <p className="text-muted-foreground">Floor 2 visualization loading...</p>
-          </div>
-        </TabsContent>
-        <TabsContent value="floor3">
-          <div className="flex items-center justify-center h-40 border rounded-md bg-muted">
-            <p className="text-muted-foreground">Floor 3 visualization loading...</p>
-          </div>
         </TabsContent>
       </Tabs>
     </div>
