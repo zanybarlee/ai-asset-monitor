@@ -63,58 +63,14 @@ const AssetsContent = ({
       </Card>
       
       <div className="md:col-span-3">
-        <Tabs defaultValue="all" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="grid grid-cols-4 mb-4">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="operational">Operational</TabsTrigger>
-            <TabsTrigger value="warning">Warning</TabsTrigger>
-            <TabsTrigger value="critical">Critical</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="all">
-            <AssetsList 
-              assets={assets}
-              searchQuery={searchQuery}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              onViewAsset={onViewAsset}
-              onShowQRCode={onShowQRCode}
-            />
-          </TabsContent>
-          
-          <TabsContent value="operational">
-            <AssetsList 
-              assets={assets}
-              searchQuery={searchQuery}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              onViewAsset={onViewAsset}
-              onShowQRCode={onShowQRCode}
-            />
-          </TabsContent>
-          
-          <TabsContent value="warning">
-            <AssetsList 
-              assets={assets}
-              searchQuery={searchQuery}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              onViewAsset={onViewAsset}
-              onShowQRCode={onShowQRCode}
-            />
-          </TabsContent>
-          
-          <TabsContent value="critical">
-            <AssetsList 
-              assets={assets}
-              searchQuery={searchQuery}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              onViewAsset={onViewAsset}
-              onShowQRCode={onShowQRCode}
-            />
-          </TabsContent>
-        </Tabs>
+        <AssetsList 
+          assets={assets}
+          searchQuery={searchQuery}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+          onViewAsset={onViewAsset}
+          onShowQRCode={onShowQRCode}
+        />
       </div>
     </div>
   );
