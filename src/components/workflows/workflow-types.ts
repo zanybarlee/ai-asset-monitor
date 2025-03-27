@@ -12,4 +12,5 @@ export interface WorkflowTemplate {
   status: string;
   department: string;
   checklist: ChecklistItem[];
+  description?: string;
 }
