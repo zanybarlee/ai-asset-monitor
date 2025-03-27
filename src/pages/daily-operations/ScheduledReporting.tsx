@@ -1,8 +1,10 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Clock, BarChart, Calendar, Download, Plus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CreateReportDialog } from "@/components/daily-operations/CreateReportDialog";
 
 // Mock data for reports
 const scheduledReports = [
@@ -57,11 +59,13 @@ const recentReports = [
 ];
 
 const ScheduledReporting = () => {
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Reporting Dashboard</h3>
-        <Button size="sm" className="gap-1">
+        <Button size="sm" className="gap-1" onClick={() => setCreateDialogOpen(true)}>
           <Plus className="h-4 w-4" />
           Create Report
         </Button>
@@ -162,6 +166,12 @@ const ScheduledReporting = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add the Create Report Dialog */}
+      <CreateReportDialog 
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+      />
     </div>
   );
 };
