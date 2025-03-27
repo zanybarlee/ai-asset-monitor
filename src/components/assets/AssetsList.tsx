@@ -81,36 +81,10 @@ const AssetsList = ({
     }
   };
 
-  return (
-    <Card className="glass">
-      <CardHeader className="pb-2">
-        <Tabs 
-          defaultValue="all" 
-          className="w-full"
-          onValueChange={setSelectedTab}
-          value={selectedTab}
-        >
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">
-              All 
-              <Badge variant="outline" className="ml-2">{assets.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="operational">
-              Operational
-              <Badge variant="outline" className="ml-2">{operationalCount}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="warning">
-              Warning
-              <Badge variant="outline" className="ml-2">{warningCount}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="critical">
-              Critical
-              <Badge variant="outline" className="ml-2">{criticalCount}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </CardHeader>
-      <CardContent>
+  // Create view components based on activeView prop
+  const renderAssetView = () => {
+    if (activeView === "list") {
+      return (
         <div className="rounded-md border">
           <div className="grid grid-cols-7 bg-muted/50 p-4 text-sm font-medium">
             <div className="flex items-center gap-2">
@@ -173,7 +147,125 @@ const AssetsList = ({
             )}
           </div>
         </div>
-      </CardContent>
+      );
+    } else if (activeView === "grid") {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {filteredAssets.length > 0 ? (
+            filteredAssets.map((asset) => (
+              <Card key={asset.id} className="overflow-hidden">
+                <CardHeader className="p-4 pb-2">
+                  <div className="flex justify-between">
+                    <div className="font-medium">{asset.name}</div>
+                    {getStatusBadge(asset.status)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">{asset.id}</div>
+                </CardHeader>
+                <CardContent className="p-4 pt-2">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Type:</span>
+                      <span>{asset.type}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Location:</span>
+                      <span>{asset.location}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Health:</span>
+                      <div className="flex items-center gap-2">
+                        <span className={getHealthColor(asset.health)}>{asset.health}%</span>
+                        <Progress 
+                          value={asset.health} 
+                          className="h-2 w-16"
+                          style={{
+                            background: asset.health >= 85 ? 'rgba(16, 185, 129, 0.2)' :
+                                      asset.health >= 60 ? 'rgba(245, 158, 11, 0.2)' : 
+                                      'rgba(239, 68, 68, 0.2)',
+                            color: asset.health >= 85 ? 'rgb(16, 185, 129)' :
+                                    asset.health >= 60 ? 'rgb(245, 158, 11)' : 
+                                    'rgb(239, 68, 68)'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Last Maintenance:</span>
+                      <span>{asset.lastMaintenance}</span>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="p-4 pt-0 flex justify-between">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => onViewAsset(asset)}
+                  >
+                    View Details
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => onShowQRCode(asset)}
+                  >
+                    <QrCode className="h-4 w-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-full p-4 text-center text-muted-foreground">
+              No assets match the current filters
+            </div>
+          )}
+        </div>
+      );
+    } else if (activeView === "tree") {
+      return (
+        <div className="p-4 text-center">
+          <div className="py-8 text-muted-foreground">
+            Tree view functionality coming soon...
+          </div>
+        </div>
+      );
+    }
+    
+    // Default fallback
+    return null;
+  };
+
+  return (
+    <Card className="glass">
+      <CardHeader className="pb-2">
+        <Tabs 
+          defaultValue="all" 
+          className="w-full"
+          onValueChange={setSelectedTab}
+          value={selectedTab}
+        >
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="all">
+              All 
+              <Badge variant="outline" className="ml-2">{assets.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="operational">
+              Operational
+              <Badge variant="outline" className="ml-2">{operationalCount}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="warning">
+              Warning
+              <Badge variant="outline" className="ml-2">{warningCount}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="critical">
+              Critical
+              <Badge variant="outline" className="ml-2">{criticalCount}</Badge>
+            </TabsTrigger>
+          </TabsList>
+          <div className="mt-2">
+            {renderAssetView()}
+          </div>
+        </Tabs>
+      </CardHeader>
       <CardFooter className="flex justify-between">
         <div className="text-sm text-muted-foreground">
           Showing {filteredAssets.length} of {assets.length} assets
