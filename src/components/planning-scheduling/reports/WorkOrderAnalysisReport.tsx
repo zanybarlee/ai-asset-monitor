@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from "recharts";
-import { mockWorkOrderData } from "@/components/planning-scheduling/mock-data";
+import { mockWorkOrderData, mockWorkOrderLocationData } from "@/components/planning-scheduling/mock-data";
 
 interface WorkOrderLocationDataType {
   name: string;
