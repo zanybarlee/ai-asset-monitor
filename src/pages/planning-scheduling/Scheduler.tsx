@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
-import { ChevronDown, Plus, Filter, BarChart3, CalendarRange, Calendar } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { ChevronDown, Plus, Filter, BarChart3, CalendarRange } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import { useToast } from "@/hooks/use-toast";
 import ScheduleGanttView from "@/components/planning-scheduling/ScheduleGanttView";
 import ScheduleCalendarView from "@/components/planning-scheduling/ScheduleCalendarView";
 import CreateTaskDialog from "@/components/planning-scheduling/CreateTaskDialog";
@@ -143,51 +142,6 @@ const Scheduler = () => {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <Card>
-        <CardHeader className="pb-2 flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">Upcoming Tasks</CardTitle>
-          <Badge variant="outline">{filteredSchedules.length} tasks</Badge>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredSchedules.length === 0 ? (
-              <div className="text-center py-4 text-muted-foreground">
-                No maintenance tasks match your current filters
-              </div>
-            ) : (
-              filteredSchedules.slice(0, 5).map((schedule) => (
-                <div key={schedule.id} className="flex items-center justify-between border-b pb-2">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-8 rounded-full ${
-                      schedule.priority === "Critical" ? "bg-red-500" : 
-                      schedule.priority === "High" ? "bg-orange-500" : 
-                      schedule.priority === "Medium" ? "bg-blue-500" : 
-                      "bg-green-500"
-                    }`}></div>
-                    <div>
-                      <p className="font-medium">{schedule.title}</p>
-                      <p className="text-sm text-muted-foreground">{schedule.id} • {schedule.location}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-sm">
-                      <span className="text-muted-foreground">Type:</span> {schedule.type}
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-muted-foreground">Team:</span> {schedule.team}
-                    </div>
-                    <div className="flex items-center text-sm">
-                      <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                      <span>{new Date(schedule.startDate).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Create Task Dialog */}
       {showCreateTask && (
