@@ -1,15 +1,17 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import VisitorBasicInfo from "./registration/VisitorBasicInfo";
+import VisitorContactInfo from "./registration/VisitorContactInfo";
+import VisitorSchedule from "./registration/VisitorSchedule";
+import VisitorAccess from "./registration/VisitorAccess";
+import SecurityAgreement from "./registration/SecurityAgreement";
+import { Visitor } from "./types";
 
 interface RegisterVisitorDialogProps {
-  onVisitorRegistered: (visitor: any) => void;
+  onVisitorRegistered: (visitor: Visitor) => void;
 }
 
 const RegisterVisitorDialog = ({ onVisitorRegistered }: RegisterVisitorDialogProps) => {
@@ -40,7 +42,7 @@ const RegisterVisitorDialog = ({ onVisitorRegistered }: RegisterVisitorDialogPro
     }
     
     // Create new visitor with generated ID
-    const newVisitor = {
+    const newVisitor: Visitor = {
       id: `V-${Math.floor(1000 + Math.random() * 9000)}`,
       name,
       company,
@@ -84,160 +86,42 @@ const RegisterVisitorDialog = ({ onVisitorRegistered }: RegisterVisitorDialogPro
       
       <form onSubmit={handleSubmit} className="space-y-4 py-4">
         <div className="grid grid-cols-1 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">
-              Visitor Name <span className="text-destructive">*</span>
-            </label>
-            <Input 
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              required
-            />
-          </div>
+          <VisitorBasicInfo
+            name={name}
+            setName={setName}
+            company={company}
+            setCompany={setCompany}
+            purpose={purpose}
+            setPurpose={setPurpose}
+            host={host}
+            setHost={setHost}
+          />
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="company" className="text-sm font-medium">
-                Company <span className="text-destructive">*</span>
-              </label>
-              <Input 
-                id="company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder="Company name"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label htmlFor="host" className="text-sm font-medium">
-                Host <span className="text-destructive">*</span>
-              </label>
-              <Input 
-                id="host"
-                value={host}
-                onChange={(e) => setHost(e.target.value)}
-                placeholder="Host employee name"
-                required
-              />
-            </div>
-          </div>
+          <VisitorContactInfo
+            email={email}
+            setEmail={setEmail}
+            phone={phone}
+            setPhone={setPhone}
+          />
           
-          <div className="space-y-2">
-            <label htmlFor="purpose" className="text-sm font-medium">
-              Visit Purpose <span className="text-destructive">*</span>
-            </label>
-            <Textarea 
-              id="purpose"
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-              placeholder="Purpose of the visit"
-              required
-            />
-          </div>
+          <VisitorSchedule
+            visitDate={visitDate}
+            setVisitDate={setVisitDate}
+            visitTime={visitTime}
+            setVisitTime={setVisitTime}
+          />
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email Address
-              </label>
-              <Input 
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label htmlFor="phone" className="text-sm font-medium">
-                Phone Number
-              </label>
-              <Input 
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Contact number"
-              />
-            </div>
-          </div>
+          <VisitorAccess
+            accessLevel={accessLevel}
+            setAccessLevel={setAccessLevel}
+            requiresEscort={requiresEscort}
+            setRequiresEscort={setRequiresEscort}
+          />
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="visitDate" className="text-sm font-medium">
-                Visit Date <span className="text-destructive">*</span>
-              </label>
-              <Input 
-                id="visitDate"
-                type="date"
-                value={visitDate}
-                onChange={(e) => setVisitDate(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label htmlFor="visitTime" className="text-sm font-medium">
-                Visit Time <span className="text-destructive">*</span>
-              </label>
-              <Input 
-                id="visitTime"
-                type="time"
-                value={visitTime}
-                onChange={(e) => setVisitTime(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="accessLevel" className="text-sm font-medium">
-                Access Level
-              </label>
-              <Select value={accessLevel} onValueChange={setAccessLevel}>
-                <SelectTrigger id="accessLevel">
-                  <SelectValue placeholder="Select access level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Limited">Limited</SelectItem>
-                  <SelectItem value="Standard">Standard</SelectItem>
-                  <SelectItem value="Extended">Extended</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="flex items-center space-x-2 mt-8">
-              <Checkbox
-                id="requiresEscort"
-                checked={requiresEscort}
-                onCheckedChange={(checked) => 
-                  setRequiresEscort(checked as boolean)
-                }
-              />
-              <label htmlFor="requiresEscort" className="text-sm font-medium">
-                Requires Escort
-              </label>
-            </div>
-          </div>
-          
-          <div className="border-t pt-4 mt-2">
-            <div className="flex items-start space-x-2">
-              <Checkbox
-                id="agreed"
-                checked={agreed}
-                onCheckedChange={(checked) => 
-                  setAgreed(checked as boolean)
-                }
-              />
-              <label htmlFor="agreed" className="text-sm">
-                I confirm this visitor has been approved for facility access and understands all security protocols and requirements.
-              </label>
-            </div>
-          </div>
+          <SecurityAgreement
+            agreed={agreed}
+            setAgreed={setAgreed}
+          />
         </div>
         
         <DialogFooter>
