@@ -9,18 +9,18 @@ const SiteManagement = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to MEP evaluation by default if we're on the root path
+    // Redirect to inventory by default if we're on the root path
     if (location.pathname === "/sitemanagement") {
-      navigate("/sitemanagement/mep", { replace: true });
+      navigate("/sitemanagement/inventory", { replace: true });
     }
   }, [location.pathname, navigate]);
 
   // Determine which tab should be active based on the URL path
   const getActiveTab = () => {
+    if (location.pathname.includes('/inventory')) return 'inventory';
     if (location.pathname.includes('/mep')) return 'mep';
     if (location.pathname.includes('/digitaltwin')) return 'digitaltwin';
-    if (location.pathname.includes('/inventory')) return 'inventory';
-    return 'mep'; // Default to MEP tab
+    return 'inventory'; // Default to Inventory tab
   };
 
   return (
@@ -32,16 +32,16 @@ const SiteManagement = () => {
         </p>
       </div>
 
-      <Tabs defaultValue="mep" value={getActiveTab()} className="space-y-4">
+      <Tabs defaultValue="inventory" value={getActiveTab()} className="space-y-4">
         <TabsList>
+          <TabsTrigger value="inventory" asChild>
+            <Link to="/sitemanagement/inventory">Provisioning & Inventory</Link>
+          </TabsTrigger>
           <TabsTrigger value="mep" asChild>
             <Link to="/sitemanagement/mep">MEP Evaluation</Link>
           </TabsTrigger>
           <TabsTrigger value="digitaltwin" asChild>
             <Link to="/sitemanagement/digitaltwin">Digital Twin</Link>
-          </TabsTrigger>
-          <TabsTrigger value="inventory" asChild>
-            <Link to="/sitemanagement/inventory">Provisioning & Inventory</Link>
           </TabsTrigger>
         </TabsList>
         <div className="pt-4">

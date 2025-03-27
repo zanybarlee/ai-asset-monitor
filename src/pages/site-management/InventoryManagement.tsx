@@ -1,12 +1,29 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Package, Server, HardDrive, Cpu, Cable, PlusCircle, ArrowUpDown, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import AddItemDialog, { InventoryItem } from "@/components/inventory/AddItemDialog";
 
 const InventoryManagement = () => {
+  const [open, setOpen] = useState(false);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([
+    { id: 'SRV-1042', name: 'Dell PowerEdge R740', category: 'Server', location: 'Server Room A', status: 'Deployed' },
+    { id: 'STO-789', name: 'NetApp FAS8700', category: 'Storage', location: 'Server Room A', status: 'Deployed' },
+    { id: 'SRV-1043', name: 'HP ProLiant DL380', category: 'Server', location: 'Inventory', status: 'Available' },
+    { id: 'NET-442', name: 'Cisco Nexus 9336C', category: 'Network', location: 'Rack B12', status: 'Deployed' },
+    { id: 'SRV-1044', name: 'Dell PowerEdge R640', category: 'Server', location: 'Server Room B', status: 'Maintenance' },
+  ]);
+
+  const handleAddItem = (newItem: InventoryItem) => {
+    setInventoryItems([...inventoryItems, newItem]);
+    setOpen(false);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -19,10 +36,15 @@ const InventoryManagement = () => {
             <Search className="mr-2 h-4 w-4" />
             Search
           </Button>
-          <Button size="sm">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Item
-          </Button>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Item
+              </Button>
+            </DialogTrigger>
+            <AddItemDialog onItemAdded={handleAddItem} />
+          </Dialog>
         </div>
       </div>
 
@@ -114,13 +136,7 @@ const InventoryManagement = () => {
                   <div className="col-span-2">Status</div>
                   <div className="col-span-2">Last Updated</div>
                 </div>
-                {[
-                  { id: 'SRV-1042', name: 'Dell PowerEdge R740', category: 'Server', location: 'Server Room A', status: 'Deployed', updated: '2 days ago' },
-                  { id: 'STO-789', name: 'NetApp FAS8700', category: 'Storage', location: 'Server Room A', status: 'Deployed', updated: '5 days ago' },
-                  { id: 'SRV-1043', name: 'HP ProLiant DL380', category: 'Server', location: 'Inventory', status: 'Available', updated: '1 week ago' },
-                  { id: 'NET-442', name: 'Cisco Nexus 9336C', category: 'Network', location: 'Rack B12', status: 'Deployed', updated: '3 days ago' },
-                  { id: 'SRV-1044', name: 'Dell PowerEdge R640', category: 'Server', location: 'Server Room B', status: 'Maintenance', updated: '1 day ago' },
-                ].map((item, i) => (
+                {inventoryItems.map((item, i) => (
                   <div key={i} className="grid grid-cols-12 p-4 text-sm border-t">
                     <div className="col-span-1 font-medium">{item.id}</div>
                     <div className="col-span-3">{item.name}</div>
@@ -135,13 +151,17 @@ const InventoryManagement = () => {
                         {item.status}
                       </span>
                     </div>
-                    <div className="col-span-2 text-muted-foreground">{item.updated}</div>
+                    <div className="col-span-2 text-muted-foreground">
+                      {item.id.startsWith('SRV') || item.id.startsWith('STO') || item.id.startsWith('NET') 
+                        ? ['2 days ago', '5 days ago', '1 week ago', '3 days ago', '1 day ago'][i % 5] 
+                        : 'Just now'}
+                    </div>
                   </div>
                 ))}
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <div className="text-sm text-muted-foreground">Showing 5 of 1284 items</div>
+              <div className="text-sm text-muted-foreground">Showing {inventoryItems.length} of {1280 + inventoryItems.length} items</div>
               <div className="flex gap-1">
                 <Button variant="outline" size="sm" disabled>Previous</Button>
                 <Button variant="outline" size="sm">Next</Button>
