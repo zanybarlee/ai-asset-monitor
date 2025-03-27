@@ -12,9 +12,10 @@ import { useGanttCalendarUtils } from "./useGanttCalendarUtils";
 interface ScheduleGanttViewProps {
   schedules: any[];
   period: string;
+  upcomingTasks?: any[];
 }
 
-const ScheduleGanttView = ({ schedules, period }: ScheduleGanttViewProps) => {
+const ScheduleGanttView = ({ schedules, period, upcomingTasks }: ScheduleGanttViewProps) => {
   const { days, navigatePeriod, isTaskOnDay, calculateTaskBar } = useGanttCalendarUtils({ period });
   
   return (
@@ -37,7 +38,7 @@ const ScheduleGanttView = ({ schedules, period }: ScheduleGanttViewProps) => {
       </div>
       
       {/* Upcoming Tasks Section */}
-      <UpcomingTasks schedules={schedules} />
+      <UpcomingTasks schedules={upcomingTasks || []} />
     </div>
   );
 };

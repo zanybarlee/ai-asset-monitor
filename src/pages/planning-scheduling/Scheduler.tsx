@@ -19,7 +19,9 @@ const Scheduler = () => {
     setSelectedPeriod,
     dateRange,
     setDateRange,
-    filteredSchedules
+    filteredSchedules,
+    upcomingTasks,
+    scheduledMaintenance
   } = useSchedulerData();
   
   const handleCreateTask = () => {
@@ -54,6 +56,8 @@ const Scheduler = () => {
         setCurrentView={setCurrentView}
         filteredSchedules={filteredSchedules}
         selectedPeriod={selectedPeriod}
+        upcomingTasks={upcomingTasks}
+        scheduledMaintenance={scheduledMaintenance}
       />
 
       {showCreateTask && (

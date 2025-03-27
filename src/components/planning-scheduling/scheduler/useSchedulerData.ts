@@ -1,7 +1,7 @@
 
 import { useState, useMemo } from "react";
 import { DateRange } from "react-day-picker";
-import { mockSchedules } from "@/components/planning-scheduling/mock-data/schedule-data";
+import { mockSchedules, getUpcomingTasks, getScheduledMaintenance } from "@/components/planning-scheduling/mock-data/schedule-data";
 
 export const useSchedulerData = () => {
   const [selectedTeam, setSelectedTeam] = useState("all");
@@ -32,6 +32,16 @@ export const useSchedulerData = () => {
     });
   }, [selectedTeam, dateRange]);
 
+  // Get upcoming tasks
+  const upcomingTasks = useMemo(() => {
+    return getUpcomingTasks();
+  }, []);
+
+  // Get scheduled maintenance tasks
+  const scheduledMaintenance = useMemo(() => {
+    return getScheduledMaintenance();
+  }, []);
+
   return {
     selectedTeam,
     setSelectedTeam,
@@ -39,6 +49,8 @@ export const useSchedulerData = () => {
     setSelectedPeriod,
     dateRange,
     setDateRange,
-    filteredSchedules
+    filteredSchedules,
+    upcomingTasks,
+    scheduledMaintenance
   };
 };

@@ -10,13 +10,17 @@ interface SchedulerViewTabsProps {
   setCurrentView: (view: string) => void;
   filteredSchedules: any[];
   selectedPeriod: string;
+  upcomingTasks?: any[];
+  scheduledMaintenance?: any[];
 }
 
 const SchedulerViewTabs = ({
   currentView,
   setCurrentView,
   filteredSchedules,
-  selectedPeriod
+  selectedPeriod,
+  upcomingTasks,
+  scheduledMaintenance
 }: SchedulerViewTabsProps) => {
   return (
     <Tabs defaultValue="gantt" value={currentView} onValueChange={setCurrentView}>
@@ -37,7 +41,11 @@ const SchedulerViewTabs = ({
             <CardTitle className="text-lg">Maintenance Schedule - Gantt Chart</CardTitle>
           </CardHeader>
           <CardContent>
-            <ScheduleGanttView schedules={filteredSchedules} period={selectedPeriod} />
+            <ScheduleGanttView 
+              schedules={filteredSchedules} 
+              period={selectedPeriod} 
+              upcomingTasks={upcomingTasks}
+            />
           </CardContent>
         </Card>
       </TabsContent>
@@ -48,7 +56,11 @@ const SchedulerViewTabs = ({
             <CardTitle className="text-lg">Maintenance Schedule - Calendar View</CardTitle>
           </CardHeader>
           <CardContent>
-            <ScheduleCalendarView schedules={filteredSchedules} period={selectedPeriod} />
+            <ScheduleCalendarView 
+              schedules={filteredSchedules} 
+              period={selectedPeriod} 
+              upcomingTasks={upcomingTasks}
+            />
           </CardContent>
         </Card>
       </TabsContent>
