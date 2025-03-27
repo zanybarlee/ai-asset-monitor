@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Filter, Check, Clock, AlertTriangle, Tool } from "lucide-react";
+import { Plus, Filter, Check, Clock, AlertTriangle, Wrench } from "lucide-react";
 import { mockOrders } from "@/components/work-orders/work-orders-data";
 import WorkOrdersList from "@/components/work-orders/WorkOrdersList";
 import WorkOrderForm from "@/components/work-orders/WorkOrderForm";

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { WorkOrder } from "./work-orders-data";
-import { Tool } from "lucide-react";
+import { Wrench } from "lucide-react";
 
 interface WorkOrdersListProps {
   orders: WorkOrder[];
@@ -62,7 +62,7 @@ const WorkOrdersList = ({
                 <div className="flex justify-end items-center gap-2">
                   {order.status !== "Completed" && (
                     <Button variant="outline" size="sm">
-                      <Tool className="mr-2 h-4 w-4" />
+                      <Wrench className="mr-2 h-4 w-4" />
                       Dispatch
                     </Button>
                   )}
