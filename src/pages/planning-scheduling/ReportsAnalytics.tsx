@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,12 +6,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Download, FileText, BarChart3, PieChart as PieChartIcon, TrendingUp } from "lucide-react";
-import { mockTimelineData, mockWorkTypeData, mockComplianceData } from "@/components/planning-scheduling/mock-data";
+import { mockTimelineData, mockWorkTypeData, mockComplianceData, mockWorkOrderData } from "@/components/planning-scheduling/mock-data";
+import { DateRange } from "react-day-picker";
 
 const ReportsAnalytics = () => {
   const [reportType, setReportType] = useState("pm-compliance");
   const [timePeriod, setTimePeriod] = useState("month");
-  const [dateRange, setDateRange] = useState({ from: new Date(), to: new Date() });
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({ 
+    from: new Date(), 
+    to: new Date() 
+  });
 
   return (
     <div className="space-y-6">
