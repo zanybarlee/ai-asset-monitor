@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -8,6 +7,8 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Package, Server, HardDrive, Cpu, Cable, PlusCircle, ArrowUpDown, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import AddItemDialog, { InventoryItem } from "@/components/inventory/AddItemDialog";
+import SoftwareInventory from "@/components/inventory/SoftwareInventory";
+import ProceduresDocumentation from "@/components/inventory/ProceduresDocumentation";
 
 const InventoryManagement = () => {
   const [open, setOpen] = useState(false);
@@ -170,6 +171,10 @@ const InventoryManagement = () => {
           </Card>
         </TabsContent>
         
+        <TabsContent value="software">
+          <SoftwareInventory />
+        </TabsContent>
+        
         <TabsContent value="provisioning">
           <Card>
             <CardHeader>
@@ -268,16 +273,8 @@ const InventoryManagement = () => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="software">
-          <div className="flex items-center justify-center h-40 border rounded-md bg-muted">
-            <p className="text-muted-foreground">Software inventory module loading...</p>
-          </div>
-        </TabsContent>
-        
         <TabsContent value="procedures">
-          <div className="flex items-center justify-center h-40 border rounded-md bg-muted">
-            <p className="text-muted-foreground">Procedures documentation loading...</p>
-          </div>
+          <ProceduresDocumentation />
         </TabsContent>
       </Tabs>
     </div>
