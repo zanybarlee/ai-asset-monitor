@@ -1,12 +1,20 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { AlertTriangle, CheckSquare, ClipboardList, Download, FileDown, Filter, ListChecks, Power, Printer } from "lucide-react";
+import { AlertTriangle, CheckSquare, ClipboardList, Download, Filter, ListChecks, Power, Printer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import NewShutdownDialog from "@/components/project-management/NewShutdownDialog";
 
 const ShutdownManagement = () => {
+  const [showNewShutdownDialog, setShowNewShutdownDialog] = useState(false);
+  
+  const handleNewShutdown = () => {
+    setShowNewShutdownDialog(true);
+  };
+  
   const mockShutdownTasks = [
     {
       id: "TASK-101",
@@ -97,7 +105,7 @@ const ShutdownManagement = () => {
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={handleNewShutdown}>
             <ListChecks className="mr-2 h-4 w-4" />
             New Shutdown
           </Button>
@@ -308,6 +316,13 @@ const ShutdownManagement = () => {
           </ul>
         </div>
       </div>
+      
+      {showNewShutdownDialog && (
+        <NewShutdownDialog 
+          open={showNewShutdownDialog} 
+          onClose={() => setShowNewShutdownDialog(false)} 
+        />
+      )}
     </div>
   );
 };
