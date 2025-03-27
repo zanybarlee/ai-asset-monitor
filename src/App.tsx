@@ -41,6 +41,12 @@ import Scheduler from "@/pages/planning-scheduling/Scheduler";
 import BacklogManagement from "@/pages/planning-scheduling/BacklogManagement";
 import ResourceOptimization from "@/pages/planning-scheduling/ResourceOptimization";
 import ReportsAnalytics from "@/pages/planning-scheduling/ReportsAnalytics";
+import ProjectManagement from "@/pages/ProjectManagement";
+import ProjectDashboard from "@/pages/project-management/Dashboard";
+import ProjectGantt from "@/pages/project-management/ProjectGantt";
+import BudgetTracking from "@/pages/project-management/BudgetTracking";
+import ShutdownManagement from "@/pages/project-management/ShutdownManagement";
+import ProjectReports from "@/pages/project-management/ProjectReports";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -94,6 +100,13 @@ const App = () => (
                 <Route path="backlog" element={<BacklogManagement />} />
                 <Route path="resources" element={<ResourceOptimization />} />
                 <Route path="reports" element={<ReportsAnalytics />} />
+              </Route>
+              <Route path="projects" element={<ProjectManagement />}>
+                <Route path="dashboard" element={<ProjectDashboard />} />
+                <Route path="gantt" element={<ProjectGantt />} />
+                <Route path="budget" element={<BudgetTracking />} />
+                <Route path="shutdown" element={<ShutdownManagement />} />
+                <Route path="reports" element={<ProjectReports />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Route>
