@@ -11,10 +11,10 @@ const Sidebar = () => {
   
   const navigation = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Planning & Scheduling", href: "/planning", icon: CalendarRange },
     { name: "Assets", href: "/assets", icon: Box },
     { name: "Work Orders", href: "/workorders", icon: Clipboard },
     { name: "Maintenance", href: "/maintenance", icon: History },
-    { name: "Planning & Scheduling", href: "/planning", icon: CalendarRange },
     { name: "Workflows", href: "/workflows", icon: ListChecks },
     { name: "Daily Operations", href: "/operations", icon: CalendarCheck },
     { name: "Historical Data", href: "/historical", icon: Database },
