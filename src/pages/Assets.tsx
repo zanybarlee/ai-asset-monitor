@@ -23,6 +23,7 @@ const Assets = () => {
   const [showCBMSettings, setShowCBMSettings] = useState(false);
   const [showLifecycleStages, setShowLifecycleStages] = useState(false);
   const [showMaintenanceTimeline, setShowMaintenanceTimeline] = useState(false);
+  const [showMaintenanceSchedule, setShowMaintenanceSchedule] = useState(false);
   
   const handleViewAsset = (asset: AssetType) => {
     setSelectedAsset(asset);
@@ -92,6 +93,10 @@ const Assets = () => {
         setActiveView={setActiveView}
         onViewAsset={handleViewAsset}
         onShowQRCode={handleShowQRCode}
+        onShowCBMSettings={() => setShowCBMSettings(true)}
+        onShowLifecycleStages={() => setShowLifecycleStages(true)}
+        onShowMaintenanceTimeline={() => setShowMaintenanceTimeline(true)}
+        onShowMaintenanceSchedule={() => setShowMaintenanceSchedule(true)}
       />
       
       <AssetDialogs 
@@ -112,6 +117,8 @@ const Assets = () => {
         setShowLifecycleStages={setShowLifecycleStages}
         showMaintenanceTimeline={showMaintenanceTimeline}
         setShowMaintenanceTimeline={setShowMaintenanceTimeline}
+        showMaintenanceSchedule={showMaintenanceSchedule}
+        setShowMaintenanceSchedule={setShowMaintenanceSchedule}
         onAssetCreated={handleCreateAsset}
       />
     </div>

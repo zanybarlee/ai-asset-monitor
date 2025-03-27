@@ -28,6 +28,8 @@ interface AssetDialogsProps {
   setShowLifecycleStages: (show: boolean) => void;
   showMaintenanceTimeline: boolean;
   setShowMaintenanceTimeline: (show: boolean) => void;
+  showMaintenanceSchedule: boolean;
+  setShowMaintenanceSchedule: (show: boolean) => void;
   onAssetCreated: (asset: AssetType) => void;
 }
 
@@ -49,6 +51,8 @@ const AssetDialogs = ({
   setShowLifecycleStages,
   showMaintenanceTimeline,
   setShowMaintenanceTimeline,
+  showMaintenanceSchedule,
+  setShowMaintenanceSchedule,
   onAssetCreated,
 }: AssetDialogsProps) => {
   return (
@@ -91,6 +95,21 @@ const AssetDialogs = ({
       {/* Maintenance Timeline Dialog */}
       <Dialog open={showMaintenanceTimeline} onOpenChange={setShowMaintenanceTimeline}>
         <AssetMaintenanceTimeline />
+      </Dialog>
+      
+      {/* Maintenance Schedule Dialog */}
+      <Dialog open={showMaintenanceSchedule} onOpenChange={setShowMaintenanceSchedule}>
+        <div className="p-6">
+          <div className="flex flex-col space-y-2 text-center sm:text-left">
+            <h2 className="text-lg font-semibold leading-none tracking-tight">Maintenance Schedule</h2>
+            <p className="text-sm text-muted-foreground">
+              Manage upcoming maintenance activities and schedules for assets
+            </p>
+          </div>
+          <div className="py-4">
+            <p className="text-center text-muted-foreground">Maintenance schedule functionality coming soon...</p>
+          </div>
+        </div>
       </Dialog>
     </>
   );

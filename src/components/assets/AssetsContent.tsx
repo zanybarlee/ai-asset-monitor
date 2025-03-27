@@ -5,6 +5,7 @@ import { AssetType } from "./mockAssetData";
 import AssetFilters from "./AssetFilters";
 import AssetsList from "./AssetsList";
 import AssetQuickActions from "./AssetQuickActions";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AssetsContentProps {
   assets: AssetType[];
@@ -16,6 +17,10 @@ interface AssetsContentProps {
   setActiveView: (view: string) => void;
   onViewAsset: (asset: AssetType) => void;
   onShowQRCode: (asset: AssetType) => void;
+  onShowCBMSettings: () => void;
+  onShowLifecycleStages: () => void;
+  onShowMaintenanceTimeline: () => void;
+  onShowMaintenanceSchedule: () => void;
 }
 
 const AssetsContent = ({
@@ -28,6 +33,10 @@ const AssetsContent = ({
   setActiveView,
   onViewAsset,
   onShowQRCode,
+  onShowCBMSettings,
+  onShowLifecycleStages,
+  onShowMaintenanceTimeline,
+  onShowMaintenanceSchedule,
 }: AssetsContentProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -41,11 +50,14 @@ const AssetsContent = ({
           <div className="space-y-2">
             <h3 className="text-sm font-medium mb-1">Quick Actions</h3>
             <div className="grid grid-cols-1 gap-2">
-              <AssetQuickActions 
-                onShowLifecycleStages={() => {}}
-                onShowCBMSettings={() => {}}
-                onShowMaintenanceTimeline={() => {}}
-              />
+              <TooltipProvider>
+                <AssetQuickActions 
+                  onShowLifecycleStages={onShowLifecycleStages}
+                  onShowCBMSettings={onShowCBMSettings}
+                  onShowMaintenanceTimeline={onShowMaintenanceTimeline}
+                  onShowMaintenanceSchedule={onShowMaintenanceSchedule}
+                />
+              </TooltipProvider>
             </div>
           </div>
           
@@ -53,9 +65,38 @@ const AssetsContent = ({
             <h3 className="text-sm font-medium mb-1">View Options</h3>
             <Tabs defaultValue="list" value={activeView} onValueChange={setActiveView} className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="list">List</TabsTrigger>
-                <TabsTrigger value="grid">Grid</TabsTrigger>
-                <TabsTrigger value="tree">Tree</TabsTrigger>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="list">List</TabsTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>View assets in a tabular list format</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="grid">Grid</TabsTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>View assets in a grid layout with cards</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TabsTrigger value="tree">Tree</TabsTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>View assets in a hierarchical tree structure</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </TabsList>
             </Tabs>
           </div>
@@ -70,6 +111,7 @@ const AssetsContent = ({
           setSelectedTab={setSelectedTab}
           onViewAsset={onViewAsset}
           onShowQRCode={onShowQRCode}
+          activeView={activeView}
         />
       </div>
     </div>
