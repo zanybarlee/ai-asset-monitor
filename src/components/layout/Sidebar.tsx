@@ -1,6 +1,5 @@
-
 import { useLocation, NavLink } from "react-router-dom";
-import { LayoutDashboard, Box, Clipboard, History, Users, Clock, Settings, ChevronLeft, ChevronRight, Server, Zap, CalendarCheck, Database, MapPin } from "lucide-react";
+import { LayoutDashboard, Box, Clipboard, History, Users, Clock, Settings, ChevronLeft, ChevronRight, Server, Zap, CalendarCheck, Database, MapPin, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sidebar as ShadcnSidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
 import { useState } from "react";
@@ -14,6 +13,7 @@ const Sidebar = () => {
     { name: "Assets", href: "/assets", icon: Box },
     { name: "Work Orders", href: "/workorders", icon: Clipboard },
     { name: "Maintenance", href: "/maintenance", icon: History },
+    { name: "Workflows", href: "/workflows", icon: ListChecks },
     { name: "Daily Operations", href: "/operations", icon: CalendarCheck },
     { name: "Historical Data", href: "/historical", icon: Database },
     { name: "Location Management", href: "/locations", icon: MapPin },

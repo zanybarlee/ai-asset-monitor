@@ -29,6 +29,7 @@ import ScheduledReporting from "@/pages/daily-operations/ScheduledReporting";
 import HistoricalData from "@/pages/HistoricalData";
 import DataRepository from "@/pages/historical-data/DataRepository";
 import AuditTrails from "@/pages/historical-data/AuditTrails";
+import Workflows from "@/pages/Workflows";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="assets" element={<Assets />} />
               <Route path="workorders" element={<WorkOrders />} />
               <Route path="maintenance" element={<Maintenance />} />
+              <Route path="workflows" element={<Workflows />} />
               <Route path="users" element={<Users />} />
               <Route path="visitors" element={<Visitors />} />
               <Route path="settings" element={<Settings />} />
