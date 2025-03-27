@@ -12,26 +12,48 @@ const Maintenance = () => {
       <MaintenanceHeader />
 
       <Tabs defaultValue="schedule" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-4">
-          <TabsTrigger value="schedule">Schedule Maintenance</TabsTrigger>
-          <TabsTrigger value="history">Maintenance History</TabsTrigger>
-          <TabsTrigger value="predictive">Predictive Analytics</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
-        </TabsList>
+        <div className="border-b mb-4">
+          <TabsList className="flex w-full justify-start space-x-2 h-12 bg-transparent p-0">
+            <TabsTrigger 
+              value="schedule" 
+              className="px-4 py-3 data-[state=active]:border-b-2 data-[state=active]:border-aramco-teal rounded-none data-[state=active]:shadow-none"
+            >
+              Schedule Maintenance
+            </TabsTrigger>
+            <TabsTrigger 
+              value="history" 
+              className="px-4 py-3 data-[state=active]:border-b-2 data-[state=active]:border-aramco-teal rounded-none data-[state=active]:shadow-none"
+            >
+              Maintenance History
+            </TabsTrigger>
+            <TabsTrigger 
+              value="predictive" 
+              className="px-4 py-3 data-[state=active]:border-b-2 data-[state=active]:border-aramco-teal rounded-none data-[state=active]:shadow-none"
+            >
+              Predictive Analytics
+            </TabsTrigger>
+            <TabsTrigger 
+              value="insights" 
+              className="px-4 py-3 data-[state=active]:border-b-2 data-[state=active]:border-aramco-teal rounded-none data-[state=active]:shadow-none"
+            >
+              AI Insights
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
-        <TabsContent value="schedule" className="mt-4">
+        <TabsContent value="schedule" className="mt-0">
           <ScheduleMaintenance />
         </TabsContent>
         
-        <TabsContent value="history" className="mt-4">
+        <TabsContent value="history" className="mt-0">
           <MaintenanceHistory />
         </TabsContent>
         
-        <TabsContent value="predictive" className="mt-4">
+        <TabsContent value="predictive" className="mt-0">
           <PredictiveAnalytics />
         </TabsContent>
         
-        <TabsContent value="insights" className="mt-4">
+        <TabsContent value="insights" className="mt-0">
           <AIInsights />
         </TabsContent>
       </Tabs>
