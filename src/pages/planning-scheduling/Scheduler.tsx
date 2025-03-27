@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { ChevronDown, Plus, Filter, BarChart3, CalendarRange } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { useToast } from "@/hooks/use-toast";
-import ScheduleGanttView from "@/components/planning-scheduling/ScheduleGanttView";
+import ScheduleGanttView from "@/components/planning-scheduling/gantt-view";
 import ScheduleCalendarView from "@/components/planning-scheduling/ScheduleCalendarView";
 import CreateTaskDialog from "@/components/planning-scheduling/CreateTaskDialog";
 import { mockSchedules } from "@/components/planning-scheduling/mock-data/schedule-data";
@@ -24,14 +23,11 @@ const Scheduler = () => {
     to: undefined,
   });
 
-  // Filter schedules based on team and date range
   const filteredSchedules = mockSchedules.filter((schedule) => {
-    // Filter by team
     if (selectedTeam !== "all" && schedule.team !== selectedTeam) {
       return false;
     }
     
-    // Filter by date range if selected
     if (dateRange?.from) {
       const scheduleDate = new Date(schedule.startDate);
       if (scheduleDate < dateRange.from) {
@@ -143,7 +139,6 @@ const Scheduler = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Create Task Dialog */}
       {showCreateTask && (
         <CreateTaskDialog
           open={showCreateTask}
