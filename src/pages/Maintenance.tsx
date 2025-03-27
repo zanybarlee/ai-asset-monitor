@@ -1,9 +1,9 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart, BarChart } from "@/components/ui/charts";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, TrendingUp, FileText, FileDown, Activity } from "lucide-react";
+import ScheduleMaintenance from "@/components/maintenance/ScheduleMaintenance";
 
 const Maintenance = () => {
   return (
@@ -28,8 +28,9 @@ const Maintenance = () => {
       </div>
 
       <Tabs defaultValue="history" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-3">
+        <TabsList className="grid w-full max-w-md grid-cols-4">
           <TabsTrigger value="history">Maintenance History</TabsTrigger>
+          <TabsTrigger value="schedule">Schedule Maintenance</TabsTrigger>
           <TabsTrigger value="predictive">Predictive Analytics</TabsTrigger>
           <TabsTrigger value="insights">AI Insights</TabsTrigger>
         </TabsList>
@@ -105,6 +106,10 @@ const Maintenance = () => {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        
+        <TabsContent value="schedule" className="mt-4">
+          <ScheduleMaintenance />
         </TabsContent>
         
         <TabsContent value="predictive" className="mt-4 space-y-4">
