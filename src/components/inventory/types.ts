@@ -1,4 +1,3 @@
-
 export interface InventoryItem {
   id: string;
   name: string;
@@ -56,4 +55,9 @@ export interface InventoryMetrics {
   openOrders: number;
   itemsToReorder: number;
   averageLeadTimeDays: number;
+}
+
+export interface WorkflowStep {
+  name: string;
+  status: "Completed" | "In Progress" | "Pending";
 }

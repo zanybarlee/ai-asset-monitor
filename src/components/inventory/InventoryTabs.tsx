@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import HardwareInventoryTable from "./HardwareInventoryTable";
 import SoftwareInventory from "./SoftwareInventory";
 import ProceduresDocumentation from "./ProceduresDocumentation";
+import ProvisioningWorkflows from "./ProvisioningWorkflows";
 import { InventoryItem } from "./types";
 
 interface InventoryTabsProps {
@@ -28,15 +29,7 @@ const InventoryTabs = ({ inventoryItems }: InventoryTabsProps) => {
       </TabsContent>
       
       <TabsContent value="provisioning">
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <h3 className="text-lg font-medium mb-4">Provisioning Workflows</h3>
-          <p className="text-muted-foreground">
-            Configure and manage automated provisioning workflows for servers, storage, and network equipment.
-          </p>
-          <div className="flex justify-center items-center h-64">
-            <p className="text-muted-foreground">This feature is coming soon.</p>
-          </div>
-        </div>
+        <ProvisioningWorkflows />
       </TabsContent>
       
       <TabsContent value="procedures">
