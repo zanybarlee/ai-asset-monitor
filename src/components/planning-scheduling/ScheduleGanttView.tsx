@@ -1,5 +1,9 @@
 
-import { BarChart3, Calendar } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface ScheduleGanttViewProps {
   schedules: any[];
@@ -7,8 +11,7 @@ interface ScheduleGanttViewProps {
 }
 
 const ScheduleGanttView = ({ schedules, period }: ScheduleGanttViewProps) => {
-  // In a real application, this would be a proper Gantt chart implementation
-  // For this example, we'll show a placeholder with sample data
+  const [currentPeriodStart, setCurrentPeriodStart] = useState(new Date());
   
   const getDaysInView = () => {
     switch (period) {
@@ -22,64 +25,196 @@ const ScheduleGanttView = ({ schedules, period }: ScheduleGanttViewProps) => {
         return 7;
     }
   };
+
+  const daysInView = getDaysInView();
+  
+  // Generate days array for header
+  const generateDays = () => {
+    const days = [];
+    const startDate = new Date(currentPeriodStart);
+    
+    for (let i = 0; i < daysInView; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      days.push(date);
+    }
+    
+    return days;
+  };
+  
+  const days = generateDays();
+  
+  // Navigate through periods
+  const navigatePeriod = (direction: 'prev' | 'next') => {
+    const newDate = new Date(currentPeriodStart);
+    if (direction === 'prev') {
+      newDate.setDate(newDate.getDate() - daysInView);
+    } else {
+      newDate.setDate(newDate.getDate() + daysInView);
+    }
+    setCurrentPeriodStart(newDate);
+  };
+  
+  // Check if a task falls on a specific day
+  const isTaskOnDay = (task: any, day: Date) => {
+    const taskStart = new Date(task.startDate);
+    const taskEnd = new Date(task.endDate);
+    const dayDate = new Date(day);
+    
+    // Reset hours to compare just the dates
+    taskStart.setHours(0, 0, 0, 0);
+    taskEnd.setHours(0, 0, 0, 0);
+    dayDate.setHours(0, 0, 0, 0);
+    
+    return dayDate >= taskStart && dayDate <= taskEnd;
+  };
+  
+  // Calculate position and width for task bar
+  const calculateTaskBar = (task: any) => {
+    const taskStart = new Date(task.startDate);
+    const taskEnd = new Date(task.endDate);
+    taskStart.setHours(0, 0, 0, 0);
+    taskEnd.setHours(0, 0, 0, 0);
+    
+    const viewStart = new Date(days[0]);
+    const viewEnd = new Date(days[days.length - 1]);
+    viewStart.setHours(0, 0, 0, 0);
+    viewEnd.setHours(0, 0, 0, 0);
+    
+    // If task is completely outside our view
+    if (taskEnd < viewStart || taskStart > viewEnd) {
+      return null;
+    }
+    
+    // Calculate visible portion
+    const visibleStart = taskStart < viewStart ? viewStart : taskStart;
+    const visibleEnd = taskEnd > viewEnd ? viewEnd : taskEnd;
+    
+    // Calculate percentage positions
+    const totalDays = (viewEnd.getTime() - viewStart.getTime()) / (1000 * 60 * 60 * 24);
+    const startOffset = (visibleStart.getTime() - viewStart.getTime()) / (1000 * 60 * 60 * 24);
+    const duration = (visibleEnd.getTime() - visibleStart.getTime()) / (1000 * 60 * 60 * 24) + 1; // +1 to include the end day
+    
+    const left = (startOffset / totalDays) * 100;
+    const width = (duration / totalDays) * 100;
+    
+    return {
+      left: `${left}%`,
+      width: `${width}%`,
+    };
+  };
   
   return (
-    <div className="border rounded-md p-6">
-      <div className="text-center mb-8">
-        <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground" />
-        <h3 className="mt-4 text-lg font-semibold">Gantt Chart View</h3>
-        <p className="text-muted-foreground">
-          {schedules.length} maintenance tasks scheduled over {getDaysInView()} {period === 'day' ? 'day' : period === 'week' ? 'days' : 'days'}.
-        </p>
-        <p className="text-muted-foreground mt-2">
-          A full interactive Gantt chart would be implemented here in the complete version.
-        </p>
+    <div className="border rounded-md p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-medium">{period === 'day' ? 'Daily' : period === 'week' ? 'Weekly' : 'Monthly'} Schedule</h3>
+        <div className="flex items-center space-x-2">
+          <Button variant="outline" size="sm" onClick={() => navigatePeriod('prev')}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm">
+            {new Date(days[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - 
+            {new Date(days[days.length - 1]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
+          <Button variant="outline" size="sm" onClick={() => navigatePeriod('next')}>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       
-      <div className="mt-6 border rounded-md overflow-hidden">
-        <div className="bg-muted p-2 grid grid-cols-8 gap-2 text-sm font-medium border-b">
-          <div className="col-span-2">Task</div>
-          <div className="col-span-6 flex">
-            {Array.from({ length: getDaysInView() > 7 ? 7 : getDaysInView() }).map((_, i) => (
-              <div key={i} className="flex-1 text-center">
-                {new Date(Date.now() + i * 86400000).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })}
-              </div>
-            ))}
-            {getDaysInView() > 7 && <div className="flex-1 text-center">...</div>}
+      <div className="overflow-x-auto">
+        <div className="min-w-[800px]">
+          {/* Header with dates */}
+          <div className="grid grid-cols-[200px_1fr] border-b">
+            <div className="p-2 font-medium text-sm">Task</div>
+            <div className="grid" style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}>
+              {days.map((day, i) => (
+                <div 
+                  key={i} 
+                  className={cn(
+                    "p-2 text-center text-sm border-l", 
+                    new Date().toDateString() === day.toDateString() ? "bg-primary/10" : ""
+                  )}
+                >
+                  <div className="font-medium">{day.toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                  <div className="text-xs">{day.getDate()}</div>
+                </div>
+              ))}
+            </div>
           </div>
+          
+          {/* Tasks */}
+          {schedules.map((task, taskIndex) => (
+            <div key={task.id} className="grid grid-cols-[200px_1fr] border-b hover:bg-muted/30">
+              <div className="p-2 flex flex-col justify-center">
+                <div className="font-medium truncate">{task.title}</div>
+                <div className="flex items-center space-x-2 mt-1">
+                  <Badge variant="outline" className={cn(
+                    "text-xs",
+                    task.priority === "Critical" ? "bg-red-100 text-red-800 hover:bg-red-100" : 
+                    task.priority === "High" ? "bg-orange-100 text-orange-800 hover:bg-orange-100" : 
+                    task.priority === "Medium" ? "bg-blue-100 text-blue-800 hover:bg-blue-100" : 
+                    "bg-green-100 text-green-800 hover:bg-green-100"
+                  )}>
+                    {task.priority}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground">{task.location}</span>
+                </div>
+              </div>
+              
+              <div className="relative" style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}>
+                {task.startDate && task.endDate && calculateTaskBar(task) && (
+                  <div 
+                    className={cn(
+                      "absolute top-1/2 transform -translate-y-1/2 h-6 rounded-sm flex items-center justify-center text-xs px-2 text-white",
+                      task.type === "PM" ? "bg-blue-500" : 
+                      task.type === "CM" ? "bg-orange-500" : 
+                      "bg-purple-500"
+                    )}
+                    style={calculateTaskBar(task)}
+                  >
+                    {task.type}: {task.id}
+                  </div>
+                )}
+                
+                {/* Grid lines */}
+                <div className="grid h-full" style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}>
+                  {days.map((day, i) => (
+                    <div 
+                      key={i} 
+                      className={cn(
+                        "h-14 border-l", 
+                        new Date().toDateString() === day.toDateString() ? "bg-primary/10" : "",
+                        isTaskOnDay(task, day) ? "bg-muted/20" : ""
+                      )}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {schedules.length === 0 && (
+            <div className="py-12 text-center text-muted-foreground">
+              No maintenance tasks scheduled for this period
+            </div>
+          )}
         </div>
-        
-        {schedules.slice(0, 5).map((schedule, index) => (
-          <div key={schedule.id} className={`grid grid-cols-8 gap-2 p-2 text-sm ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
-            <div className="col-span-2 flex items-center">
-              <div className={`w-2 h-full rounded-full mr-2 ${
-                schedule.priority === "Critical" ? "bg-red-500" : 
-                schedule.priority === "High" ? "bg-orange-500" : 
-                schedule.priority === "Medium" ? "bg-blue-500" : 
-                "bg-green-500"
-              }`}></div>
-              <div>
-                <p className="font-medium">{schedule.title}</p>
-                <p className="text-xs text-muted-foreground">{schedule.team}</p>
-              </div>
-            </div>
-            <div className="col-span-6 flex items-center">
-              <div 
-                className={`h-6 rounded-full px-2 flex items-center justify-center text-xs text-white ${
-                  schedule.type === "PM" ? "bg-blue-500" : 
-                  schedule.type === "CM" ? "bg-orange-500" : 
-                  "bg-purple-500"
-                }`}
-                style={{ 
-                  width: `${Math.min(100, schedule.duration / (getDaysInView() > 7 ? 7 : getDaysInView()) * 100)}%`,
-                  marginLeft: `${Math.min(100, schedule.dayOffset / (getDaysInView() > 7 ? 7 : getDaysInView()) * 100)}%` 
-                }}
-              >
-                {schedule.duration} day{schedule.duration > 1 ? 's' : ''}
-              </div>
-            </div>
-          </div>
-        ))}
+      </div>
+      
+      <div className="mt-4 flex space-x-4 text-sm">
+        <div className="flex items-center">
+          <div className="w-3 h-3 rounded-sm bg-blue-500 mr-1"></div>
+          <span>Preventive</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-3 h-3 rounded-sm bg-orange-500 mr-1"></div>
+          <span>Corrective</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-3 h-3 rounded-sm bg-purple-500 mr-1"></div>
+          <span>Project</span>
+        </div>
       </div>
     </div>
   );
