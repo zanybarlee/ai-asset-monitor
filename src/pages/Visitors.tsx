@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import RegisterVisitorDialog from "@/components/visitors/RegisterVisitorDialog";
 import VisitorsList from "@/components/visitors/VisitorsList";
 import VisitorMovementTimeline from "@/components/visitors/VisitorMovementTimeline";
 import VisitorAccessMap from "@/components/visitors/VisitorAccessMap";
 import QuickActionsCard from "@/components/visitors/QuickActionsCard";
 import VisitorStatsCard from "@/components/visitors/VisitorStatsCard";
+import BadgePrintingDialog from "@/components/visitors/BadgePrintingDialog";
 import { mockVisitors, visitorMovements, todaysSchedule } from "@/components/visitors/visitorData";
 import { Visitor } from "@/components/visitors/types";
 
@@ -20,6 +21,8 @@ const Visitors = () => {
   const [qrScanActive, setQrScanActive] = useState(false);
   const [visitors, setVisitors] = useState(mockVisitors);
   const [showRegisterVisitor, setShowRegisterVisitor] = useState(false);
+  const [showBadgePrinting, setShowBadgePrinting] = useState(false);
+  const [selectedVisitorForBadge, setSelectedVisitorForBadge] = useState<Visitor | null>(null);
 
   const handleQrScan = () => {
     setQrScanActive(true);
@@ -85,6 +88,14 @@ const Visitors = () => {
     });
   };
 
+  const handlePrintBadge = (visitorId: string) => {
+    const visitor = visitors.find(v => v.id === visitorId);
+    if (visitor) {
+      setSelectedVisitorForBadge(visitor);
+      setShowBadgePrinting(true);
+    }
+  };
+
   const selectedVisitorName = selectedVisitor 
     ? visitors.find(v => v.id === selectedVisitor)?.name || null
     : null;
@@ -126,6 +137,7 @@ const Visitors = () => {
             qrScanActive={qrScanActive}
             onCheckIn={handleCheckIn}
             onCheckOut={handleCheckOut}
+            onPrintBadge={handlePrintBadge}
           />
           
           {selectedVisitor && (
@@ -162,6 +174,12 @@ const Visitors = () => {
       <Dialog open={showRegisterVisitor} onOpenChange={setShowRegisterVisitor}>
         <RegisterVisitorDialog onVisitorRegistered={handleVisitorRegistered} />
       </Dialog>
+
+      {selectedVisitorForBadge && (
+        <Dialog open={showBadgePrinting} onOpenChange={setShowBadgePrinting}>
+          <BadgePrintingDialog visitor={selectedVisitorForBadge} />
+        </Dialog>
+      )}
     </div>
   );
 };

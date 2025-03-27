@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Filter, QrCode, LogIn, LogOut } from "lucide-react";
+import { Search, Filter, QrCode, LogIn, LogOut, IdCard } from "lucide-react";
 
 interface Visitor {
   id: string;
@@ -33,6 +33,7 @@ interface VisitorsListProps {
   qrScanActive: boolean;
   onCheckIn?: (visitorId: string) => void;
   onCheckOut?: (visitorId: string) => void;
+  onPrintBadge?: (visitorId: string) => void;
 }
 
 const VisitorsList = ({
@@ -44,7 +45,8 @@ const VisitorsList = ({
   onQrScan,
   qrScanActive,
   onCheckIn,
-  onCheckOut
+  onCheckOut,
+  onPrintBadge
 }: VisitorsListProps) => {
   const formatDateTime = (timestamp: string | null) => {
     if (!timestamp) return "—";
@@ -132,6 +134,14 @@ const VisitorsList = ({
                     }}>
                       <LogOut className="h-3 w-3" />
                       Check Out
+                    </Button>
+                  )}
+                  {visitor.status === "Active" && onPrintBadge && (
+                    <Button variant="outline" size="icon" className="h-6 w-6" onClick={(e) => {
+                      e.stopPropagation();
+                      onPrintBadge(visitor.id);
+                    }}>
+                      <IdCard className="h-3 w-3" />
                     </Button>
                   )}
                   {visitor.status === "Active" && (
