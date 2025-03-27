@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/drawer";
 import { WorkflowTemplate, ChecklistItem, INPUT_TYPES } from "./workflow-types";
 import { Plus, Trash } from "lucide-react";
+import WorkflowEditor from "./WorkflowEditor";
 
 interface CreateWorkflowDrawerProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ const CreateWorkflowDrawer = ({
   const [isActive, setIsActive] = useState(true);
   const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
   const [currentStep, setCurrentStep] = useState(1);
+  const [editorView, setEditorView] = useState<'list' | 'flow'>('list');
   
   // New item form state
   const [newItemDescription, setNewItemDescription] = useState("");
@@ -73,6 +75,7 @@ const CreateWorkflowDrawer = ({
     setIsActive(true);
     setChecklistItems([]);
     setCurrentStep(1);
+    setEditorView('list');
     resetNewItemForm();
   };
   
@@ -176,93 +179,119 @@ const CreateWorkflowDrawer = ({
             <div className="space-y-6">
               <h3 className="text-lg font-medium">Checklist Items</h3>
               
-              {checklistItems.length > 0 ? (
-                <div className="space-y-4 mb-6">
-                  {checklistItems.map((item, index) => (
-                    <div key={index} className="flex items-start justify-between p-3 border rounded-md">
-                      <div>
-                        <p className="font-medium">{item.description}</p>
-                        <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
-                          <span>Type: {item.inputType}</span>
-                          <span>{item.required ? "Required" : "Optional"}</span>
-                          <span>{item.critical ? "Critical" : "Non-critical"}</span>
-                        </div>
-                      </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => removeChecklistItem(index)}
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center p-6 border border-dashed rounded-md">
-                  <p className="text-muted-foreground">No checklist items added yet</p>
-                </div>
-              )}
-              
-              <div className="space-y-4 p-4 border rounded-md">
-                <h4 className="font-medium">Add New Item</h4>
-                
-                <div>
-                  <Label htmlFor="item-description">Description</Label>
-                  <Input
-                    id="item-description"
-                    placeholder="e.g. Check oil level"
-                    value={newItemDescription}
-                    onChange={(e) => setNewItemDescription(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="input-type">Input Type</Label>
-                  <Select value={newItemInputType} onValueChange={setNewItemInputType}>
-                    <SelectTrigger id="input-type" className="mt-1">
-                      <SelectValue placeholder="Select input type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {INPUT_TYPES.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      id="required" 
-                      checked={newItemRequired} 
-                      onCheckedChange={setNewItemRequired} 
-                    />
-                    <Label htmlFor="required">Required</Label>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      id="critical" 
-                      checked={newItemCritical} 
-                      onCheckedChange={setNewItemCritical} 
-                    />
-                    <Label htmlFor="critical">Critical</Label>
-                  </div>
-                </div>
-                
+              <div className="flex space-x-2">
                 <Button 
-                  onClick={addChecklistItem}
-                  disabled={!newItemDescription || !newItemInputType}
-                  className="w-full"
+                  variant={editorView === 'list' ? 'default' : 'outline'} 
+                  onClick={() => setEditorView('list')}
+                  size="sm"
                 >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Item
+                  List View
+                </Button>
+                <Button 
+                  variant={editorView === 'flow' ? 'default' : 'outline'} 
+                  onClick={() => setEditorView('flow')}
+                  size="sm"
+                >
+                  Flow Editor
                 </Button>
               </div>
+              
+              {editorView === 'list' ? (
+                <>
+                  {checklistItems.length > 0 ? (
+                    <div className="space-y-4 mb-6">
+                      {checklistItems.map((item, index) => (
+                        <div key={index} className="flex items-start justify-between p-3 border rounded-md">
+                          <div>
+                            <p className="font-medium">{item.description}</p>
+                            <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
+                              <span>Type: {item.inputType}</span>
+                              <span>{item.required ? "Required" : "Optional"}</span>
+                              <span>{item.critical ? "Critical" : "Non-critical"}</span>
+                            </div>
+                          </div>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => removeChecklistItem(index)}
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center p-6 border border-dashed rounded-md">
+                      <p className="text-muted-foreground">No checklist items added yet</p>
+                    </div>
+                  )}
+                  
+                  <div className="space-y-4 p-4 border rounded-md">
+                    <h4 className="font-medium">Add New Item</h4>
+                    
+                    <div>
+                      <Label htmlFor="item-description">Description</Label>
+                      <Input
+                        id="item-description"
+                        placeholder="e.g. Check oil level"
+                        value={newItemDescription}
+                        onChange={(e) => setNewItemDescription(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="input-type">Input Type</Label>
+                      <Select value={newItemInputType} onValueChange={setNewItemInputType}>
+                        <SelectTrigger id="input-type" className="mt-1">
+                          <SelectValue placeholder="Select input type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {INPUT_TYPES.map((type) => (
+                            <SelectItem key={type.value} value={type.value}>
+                              {type.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Switch 
+                          id="required" 
+                          checked={newItemRequired} 
+                          onCheckedChange={setNewItemRequired} 
+                        />
+                        <Label htmlFor="required">Required</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Switch 
+                          id="critical" 
+                          checked={newItemCritical} 
+                          onCheckedChange={setNewItemCritical} 
+                        />
+                        <Label htmlFor="critical">Critical</Label>
+                      </div>
+                    </div>
+                    
+                    <Button 
+                      onClick={addChecklistItem}
+                      disabled={!newItemDescription || !newItemInputType}
+                      className="w-full"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Item
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <WorkflowEditor 
+                  checklistItems={checklistItems}
+                  setChecklistItems={setChecklistItems}
+                />
+              )}
             </div>
           )}
         </div>
