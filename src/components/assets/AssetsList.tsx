@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AssetType } from "./mockAssetData";
 import AssetListView from "./AssetListView";
 import AssetGridView from "./AssetGridView";
@@ -44,32 +44,6 @@ const AssetsList = ({
   const criticalCount = assets.filter(a => a.status === "Critical").length;
   const warningCount = assets.filter(a => a.status === "Warning").length;
   const operationalCount = assets.filter(a => a.status === "Operational").length;
-  
-  // Render different views based on activeView prop
-  const renderAssetView = () => {
-    switch (activeView) {
-      case "list":
-        return <AssetListView 
-                 assets={filteredAssets} 
-                 onViewAsset={onViewAsset} 
-                 onShowQRCode={onShowQRCode} 
-               />;
-      case "grid":
-        return <AssetGridView 
-                 assets={filteredAssets} 
-                 onViewAsset={onViewAsset} 
-                 onShowQRCode={onShowQRCode} 
-               />;
-      case "tree":
-        return <AssetTreePlaceholder />;
-      default:
-        return <AssetListView 
-                 assets={filteredAssets} 
-                 onViewAsset={onViewAsset} 
-                 onShowQRCode={onShowQRCode} 
-               />;
-    }
-  };
 
   return (
     <Card className="glass">
@@ -99,9 +73,18 @@ const AssetsList = ({
             </TabsTrigger>
           </TabsList>
           
-          <div className="mt-2">
-            {renderAssetView()}
-          </div>
+          <TabsContent value="all" className="mt-2">
+            {renderAssetView(filteredAssets, activeView, onViewAsset, onShowQRCode)}
+          </TabsContent>
+          <TabsContent value="operational" className="mt-2">
+            {renderAssetView(filteredAssets, activeView, onViewAsset, onShowQRCode)}
+          </TabsContent>
+          <TabsContent value="warning" className="mt-2">
+            {renderAssetView(filteredAssets, activeView, onViewAsset, onShowQRCode)}
+          </TabsContent>
+          <TabsContent value="critical" className="mt-2">
+            {renderAssetView(filteredAssets, activeView, onViewAsset, onShowQRCode)}
+          </TabsContent>
         </Tabs>
       </CardHeader>
       <CardFooter className="flex justify-between">
@@ -119,6 +102,37 @@ const AssetsList = ({
       </CardFooter>
     </Card>
   );
+};
+
+// Helper function to render the appropriate view based on activeView prop
+const renderAssetView = (
+  assets: AssetType[], 
+  activeView: string, 
+  onViewAsset: (asset: AssetType) => void, 
+  onShowQRCode: (asset: AssetType) => void
+) => {
+  switch (activeView) {
+    case "list":
+      return <AssetListView 
+              assets={assets} 
+              onViewAsset={onViewAsset} 
+              onShowQRCode={onShowQRCode} 
+            />;
+    case "grid":
+      return <AssetGridView 
+              assets={assets} 
+              onViewAsset={onViewAsset} 
+              onShowQRCode={onShowQRCode} 
+            />;
+    case "tree":
+      return <AssetTreePlaceholder />;
+    default:
+      return <AssetListView 
+              assets={assets} 
+              onViewAsset={onViewAsset} 
+              onShowQRCode={onShowQRCode} 
+            />;
+  }
 };
 
 export default AssetsList;
