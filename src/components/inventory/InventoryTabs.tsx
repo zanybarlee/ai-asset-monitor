@@ -1,10 +1,9 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import HardwareInventoryTable from "@/components/inventory/HardwareInventoryTable";
-import SoftwareInventory from "@/components/inventory/SoftwareInventory";
-import ProvisioningWorkflows from "@/components/inventory/ProvisioningWorkflows";
-import ProceduresDocumentation from "@/components/inventory/ProceduresDocumentation";
-import { InventoryItem } from "@/components/inventory/AddItemDialog";
+import HardwareInventoryTable from "./HardwareInventoryTable";
+import SoftwareInventory from "./SoftwareInventory";
+import ProceduresDocumentation from "./ProceduresDocumentation";
+import { InventoryItem } from "./types";
 
 interface InventoryTabsProps {
   inventoryItems: InventoryItem[];
@@ -12,14 +11,15 @@ interface InventoryTabsProps {
 
 const InventoryTabs = ({ inventoryItems }: InventoryTabsProps) => {
   return (
-    <Tabs defaultValue="hardware" className="space-y-4">
-      <TabsList>
-        <TabsTrigger value="hardware">Hardware</TabsTrigger>
-        <TabsTrigger value="software">Software</TabsTrigger>
-        <TabsTrigger value="provisioning">Provisioning</TabsTrigger>
-        <TabsTrigger value="procedures">Procedures</TabsTrigger>
+    <Tabs defaultValue="hardware" className="w-full">
+      <TabsList className="grid grid-cols-4 w-full mb-4">
+        <TabsTrigger value="hardware">Hardware Inventory</TabsTrigger>
+        <TabsTrigger value="software">Software Inventory</TabsTrigger>
+        <TabsTrigger value="provisioning">Provisioning Workflows</TabsTrigger>
+        <TabsTrigger value="procedures">Procedures & Docs</TabsTrigger>
       </TabsList>
-      <TabsContent value="hardware" className="space-y-4">
+      
+      <TabsContent value="hardware">
         <HardwareInventoryTable inventoryItems={inventoryItems} />
       </TabsContent>
       
@@ -28,7 +28,15 @@ const InventoryTabs = ({ inventoryItems }: InventoryTabsProps) => {
       </TabsContent>
       
       <TabsContent value="provisioning">
-        <ProvisioningWorkflows />
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <h3 className="text-lg font-medium mb-4">Provisioning Workflows</h3>
+          <p className="text-muted-foreground">
+            Configure and manage automated provisioning workflows for servers, storage, and network equipment.
+          </p>
+          <div className="flex justify-center items-center h-64">
+            <p className="text-muted-foreground">This feature is coming soon.</p>
+          </div>
+        </div>
       </TabsContent>
       
       <TabsContent value="procedures">

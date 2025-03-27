@@ -1,143 +1,135 @@
 
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Search, PlusCircle, Copy, Download, Key, Tag, Calendar } from "lucide-react";
-
-export interface SoftwareItem {
-  id: string;
-  name: string;
-  type: string;
-  version: string;
-  licenseType: string;
-  expiryDate: string;
-  assignedTo: string;
-  status: 'Active' | 'Expired' | 'Pending';
-}
+import { Progress } from "@/components/ui/progress";
 
 const SoftwareInventory = () => {
-  const [softwareItems, setSoftwareItems] = useState<SoftwareItem[]>([
-    { 
-      id: 'SW-001', 
-      name: 'Windows Server', 
-      type: 'Operating System', 
-      version: '2022 Datacenter', 
-      licenseType: 'Volume License', 
-      expiryDate: '2025-12-31', 
-      assignedTo: 'Server Farm A', 
-      status: 'Active' 
+  // Mock software inventory data
+  const softwareItems = [
+    {
+      id: "SW-001",
+      name: "VMware vSphere",
+      version: "7.0.3",
+      licenseType: "Enterprise Plus",
+      licenseCount: 48,
+      used: 42,
+      assignedTo: "Production Cluster",
+      expiryDate: "2025-12-31",
+      status: "Active"
     },
-    { 
-      id: 'SW-002', 
-      name: 'SQL Server', 
-      type: 'Database', 
-      version: '2022 Enterprise', 
-      licenseType: 'Core-based', 
-      expiryDate: '2024-12-31', 
-      assignedTo: 'Database Cluster', 
-      status: 'Active' 
+    {
+      id: "SW-002",
+      name: "Microsoft Windows Server",
+      version: "2022",
+      licenseType: "Datacenter",
+      licenseCount: 16,
+      used: 16,
+      assignedTo: "Various Servers",
+      expiryDate: "2026-06-30",
+      status: "Active"
     },
-    { 
-      id: 'SW-003', 
-      name: 'VMware vSphere', 
-      type: 'Virtualization', 
-      version: '7.0', 
-      licenseType: 'Per-CPU', 
-      expiryDate: '2025-06-30', 
-      assignedTo: 'Virtualization Hosts', 
-      status: 'Active' 
+    {
+      id: "SW-003",
+      name: "Red Hat Enterprise Linux",
+      version: "9.0",
+      licenseType: "Premium",
+      licenseCount: 24,
+      used: 18,
+      assignedTo: "Application Servers",
+      expiryDate: "2025-09-15",
+      status: "Active"
     },
-    { 
-      id: 'SW-004', 
-      name: 'Red Hat Enterprise Linux', 
-      type: 'Operating System', 
-      version: '9.0', 
-      licenseType: 'Subscription', 
-      expiryDate: '2024-09-15', 
-      assignedTo: 'Web Servers', 
-      status: 'Active' 
+    {
+      id: "SW-004",
+      name: "Oracle Database",
+      version: "19c",
+      licenseType: "Enterprise",
+      licenseCount: 8,
+      used: 6,
+      assignedTo: "Database Cluster",
+      expiryDate: "2025-03-31",
+      status: "Active"
     },
-    { 
-      id: 'SW-005', 
-      name: 'Adobe Creative Cloud', 
-      type: 'Creative Suite', 
-      version: '2023', 
-      licenseType: 'Subscription', 
-      expiryDate: '2023-11-20', 
-      assignedTo: 'Design Team', 
-      status: 'Expired' 
-    },
-  ]);
+    {
+      id: "SW-005",
+      name: "Veeam Backup & Replication",
+      version: "12",
+      licenseType: "Enterprise",
+      licenseCount: 10,
+      used: 8,
+      assignedTo: "Backup Infrastructure",
+      expiryDate: "2024-12-15",
+      status: "Expiring Soon"
+    }
+  ];
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle>Software Inventory</CardTitle>
-            <CardDescription>Manage software licenses and deployments</CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <Input className="w-64" placeholder="Search software..." />
-            <Button variant="outline" size="icon">
-              <ArrowUpDown className="h-4 w-4" />
-            </Button>
-            <Button size="sm">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Software
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="rounded-md border">
-          <div className="grid grid-cols-12 p-4 text-sm font-medium text-muted-foreground bg-muted">
-            <div className="col-span-1">ID</div>
-            <div className="col-span-2">Name</div>
-            <div className="col-span-2">Type</div>
-            <div className="col-span-1">Version</div>
-            <div className="col-span-2">License Type</div>
-            <div className="col-span-1">Expiry</div>
-            <div className="col-span-2">Assigned To</div>
-            <div className="col-span-1">Status</div>
-          </div>
-          {softwareItems.map((item, i) => (
-            <div key={i} className="grid grid-cols-12 p-4 text-sm border-t hover:bg-muted/50">
-              <div className="col-span-1 font-medium">{item.id}</div>
-              <div className="col-span-2">{item.name}</div>
-              <div className="col-span-2">{item.type}</div>
-              <div className="col-span-1">{item.version}</div>
-              <div className="col-span-2 flex items-center">
-                <Key className="mr-1 h-3 w-3 text-muted-foreground" />
-                {item.licenseType}
-              </div>
-              <div className="col-span-1 flex items-center">
-                <Calendar className="mr-1 h-3 w-3 text-muted-foreground" />
-                {new Date(item.expiryDate).toLocaleDateString()}
-              </div>
-              <div className="col-span-2">{item.assignedTo}</div>
-              <div className="col-span-1">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  item.status === 'Active' ? 'bg-green-100 text-green-800' : 
-                  item.status === 'Expired' ? 'bg-red-100 text-red-800' : 
-                  'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {item.status}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <div className="text-sm text-muted-foreground">Showing {softwareItems.length} of 150 items</div>
-        <div className="flex gap-1">
-          <Button variant="outline" size="sm" disabled>Previous</Button>
-          <Button variant="outline" size="sm">Next</Button>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="p-4 flex justify-between items-center">
+        <h3 className="text-lg font-medium">Software License Inventory</h3>
+        <Button>Add Software License</Button>
+      </div>
+      
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>License ID</TableHead>
+              <TableHead>Software Name</TableHead>
+              <TableHead>Version</TableHead>
+              <TableHead>License Type</TableHead>
+              <TableHead>Usage</TableHead>
+              <TableHead>Assigned To</TableHead>
+              <TableHead>Expires</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {softwareItems.map((item) => {
+              const usagePercentage = (item.used / item.licenseCount) * 100;
+              const isExpiringSoon = item.status === "Expiring Soon";
+              const expiryDate = new Date(item.expiryDate);
+              const today = new Date();
+              const daysUntilExpiry = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+              
+              return (
+                <TableRow key={item.id}>
+                  <TableCell className="font-medium">{item.id}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.version}</TableCell>
+                  <TableCell>{item.licenseType}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col space-y-1">
+                      <div className="text-xs">
+                        {item.used} of {item.licenseCount} licenses used
+                      </div>
+                      <Progress 
+                        value={usagePercentage} 
+                        className={`h-2 ${usagePercentage > 90 ? 'bg-red-100' : usagePercentage > 75 ? 'bg-amber-100' : 'bg-blue-100'}`}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{item.assignedTo}</TableCell>
+                  <TableCell>
+                    {isExpiringSoon ? (
+                      <span className="text-amber-500">{daysUntilExpiry} days left</span>
+                    ) : (
+                      item.expiryDate
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {item.status === "Active" && <Badge className="bg-emerald-500">Active</Badge>}
+                    {item.status === "Expiring Soon" && <Badge className="bg-amber-500">Expiring Soon</Badge>}
+                    {item.status === "Expired" && <Badge className="bg-red-500">Expired</Badge>}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 
