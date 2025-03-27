@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { ShutdownFormValues } from "./schema";
 import { FormItem, FormLabel } from "@/components/ui/form";
@@ -16,12 +16,25 @@ export const ImpactedSystemsSection = ({ form }: ImpactedSystemsSectionProps) =>
     "Servers", "Security Systems", "Fire Detection", "Building Management"
   ];
 
+  // Initialize from existing form value
+  useEffect(() => {
+    const currentSystems = form.getValues().impactedSystems;
+    if (currentSystems && currentSystems.length > 0) {
+      setSelectedSystems(currentSystems);
+    }
+  }, [form]);
+
   const toggleSystem = (system: string) => {
-    setSelectedSystems((prev) => 
-      prev.includes(system) 
-        ? prev.filter(s => s !== system) 
-        : [...prev, system]
-    );
+    const newSelectedSystems = selectedSystems.includes(system) 
+      ? selectedSystems.filter(s => s !== system) 
+      : [...selectedSystems, system];
+    
+    setSelectedSystems(newSelectedSystems);
+    form.setValue("impactedSystems", newSelectedSystems, { 
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true
+    });
   };
 
   return (
