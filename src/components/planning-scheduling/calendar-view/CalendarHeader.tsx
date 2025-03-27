@@ -12,9 +12,11 @@ const CalendarHeader = ({ currentDate, setCurrentDate }: CalendarHeaderProps) =>
   // Navigate through months
   const navigateMonth = (direction: 'prev' | 'next') => {
     if (direction === 'prev') {
-      setCurrentDate(prevDate => subMonths(prevDate, 1));
+      const newDate = subMonths(currentDate, 1);
+      setCurrentDate(newDate);
     } else {
-      setCurrentDate(prevDate => addMonths(prevDate, 1));
+      const newDate = addMonths(currentDate, 1);
+      setCurrentDate(newDate);
     }
   };
 
