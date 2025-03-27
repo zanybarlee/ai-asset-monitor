@@ -47,6 +47,7 @@ import ProjectGantt from "@/pages/project-management/ProjectGantt";
 import BudgetTracking from "@/pages/project-management/BudgetTracking";
 import ShutdownManagement from "@/pages/project-management/ShutdownManagement";
 import ProjectReports from "@/pages/project-management/ProjectReports";
+import WarrantyManagement from "@/pages/WarrantyManagement";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
               <Route path="assets" element={<Assets />} />
               <Route path="workorders" element={<WorkOrders />} />
               <Route path="maintenance" element={<Maintenance />} />
+              <Route path="warranty" element={<WarrantyManagement />} />
               <Route path="workflows" element={<Workflows />} />
               <Route path="users" element={<Users />} />
               <Route path="visitors" element={<Visitors />} />
