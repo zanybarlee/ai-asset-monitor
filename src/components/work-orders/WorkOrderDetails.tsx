@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ import {
   CheckCircle2,
   FileText,
   Wrench,
-  Tool,
   Package
 } from "lucide-react";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
@@ -40,14 +38,11 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
     "Site Photos.zip"
   ]);
   
-  // Find the work order
   const workOrder = mockOrders.find(order => order.id === orderId) || mockOrders[0];
   
-  // Local state for parts and labor
   const [parts, setParts] = useState<Part[]>(workOrder.parts || []);
   const [laborTasks, setLaborTasks] = useState<LaborTask[]>(workOrder.laborTasks || []);
   
-  // Form for completion
   const form = useForm({
     defaultValues: {
       technicalNotes: "",
@@ -154,7 +149,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
           <div className="font-medium">{workOrder.description}</div>
         </div>
         
-        {/* SLA Breach indicator bar */}
         <div className="mb-6">
           <div className="flex justify-between text-xs text-muted-foreground mb-1">
             <span>SLA Breach</span>
@@ -172,7 +166,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
             <TabsTrigger value="attachments">Attachments</TabsTrigger>
           </TabsList>
           
-          {/* Breakdown Information Tab */}
           <TabsContent value="breakdown" className="py-4 space-y-4">
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -214,7 +207,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
             </div>
           </TabsContent>
           
-          {/* Technician Form Tab */}
           <TabsContent value="technician" className="py-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleCompleteWorkOrder)} className="space-y-4">
@@ -271,7 +263,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
                   />
                 </div>
                 
-                {/* Technician Signature */}
                 <div className="space-y-2">
                   <Label>Technician Signature</Label>
                   <div className="border rounded-md p-4 flex items-center justify-center bg-gray-50 h-24">
@@ -293,7 +284,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
             </Form>
           </TabsContent>
           
-          {/* Attachments Tab */}
           <TabsContent value="attachments" className="py-4 space-y-4">
             <div className="flex items-center gap-2 mb-4">
               <Input 
@@ -341,7 +331,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
               </table>
             </div>
             
-            {/* Parts and Labor Section */}
             <div className="mt-8 space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium">Cost Tracking</h3>
@@ -364,7 +353,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
                   </TabsTrigger>
                 </TabsList>
                 
-                {/* Parts Tab */}
                 <TabsContent value="parts" className="space-y-4 py-4">
                   <Button 
                     variant="outline" 
@@ -415,7 +403,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
                   </div>
                 </TabsContent>
                 
-                {/* Labor Tab */}
                 <TabsContent value="labor" className="space-y-4 py-4">
                   <Button 
                     variant="outline" 
@@ -466,7 +453,6 @@ const WorkOrderDetails = ({ open, onClose, orderId }: WorkOrderDetailsProps) => 
                   </div>
                 </TabsContent>
                 
-                {/* Additional Tab */}
                 <TabsContent value="additional" className="py-4">
                   <div className="p-4 text-center text-muted-foreground">
                     No additional costs added yet

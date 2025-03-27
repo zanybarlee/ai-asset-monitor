@@ -21,12 +21,14 @@ interface MaintenanceListViewProps {
   maintenanceList: MaintenanceTask[];
   onScheduleNew: () => void;
   onViewChecklist: (task: MaintenanceTask) => void;
+  onRespondToTask: (task: MaintenanceTask) => void;
 }
 
 const MaintenanceListView = ({ 
   maintenanceList, 
   onScheduleNew, 
-  onViewChecklist 
+  onViewChecklist,
+  onRespondToTask
 }: MaintenanceListViewProps) => {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
@@ -91,9 +93,9 @@ const MaintenanceListView = ({
                     <ListChecks className="mr-2 h-4 w-4" />
                     View Checklist
                   </Button>
-                  <Button size="sm">
+                  <Button size="sm" onClick={() => onRespondToTask(item)}>
                     <ClipboardList className="mr-2 h-4 w-4" />
-                    Details
+                    Respond
                   </Button>
                 </div>
               </div>
