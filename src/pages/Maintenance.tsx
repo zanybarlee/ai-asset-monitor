@@ -27,13 +27,17 @@ const Maintenance = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="history" className="w-full">
+      <Tabs defaultValue="schedule" className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-4">
-          <TabsTrigger value="history">Maintenance History</TabsTrigger>
           <TabsTrigger value="schedule">Schedule Maintenance</TabsTrigger>
+          <TabsTrigger value="history">Maintenance History</TabsTrigger>
           <TabsTrigger value="predictive">Predictive Analytics</TabsTrigger>
           <TabsTrigger value="insights">AI Insights</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="schedule" className="mt-4">
+          <ScheduleMaintenance />
+        </TabsContent>
         
         <TabsContent value="history" className="mt-4 space-y-4">
           <Card className="glass">
@@ -106,10 +110,6 @@ const Maintenance = () => {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-        
-        <TabsContent value="schedule" className="mt-4">
-          <ScheduleMaintenance />
         </TabsContent>
         
         <TabsContent value="predictive" className="mt-4 space-y-4">
