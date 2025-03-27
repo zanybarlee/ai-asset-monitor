@@ -9,19 +9,18 @@ const SiteManagement = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to inventory by default if we're on the root path
+    // Redirect to provisioning by default if we're on the root path
     if (location.pathname === "/sitemanagement") {
-      navigate("/sitemanagement/inventory", { replace: true });
+      navigate("/sitemanagement/provisioning", { replace: true });
     }
   }, [location.pathname, navigate]);
 
   // Determine which tab should be active based on the URL path
   const getActiveTab = () => {
-    if (location.pathname.includes('/inventory')) return 'inventory';
     if (location.pathname.includes('/provisioning')) return 'provisioning';
     if (location.pathname.includes('/mep')) return 'mep';
     if (location.pathname.includes('/digitaltwin')) return 'digitaltwin';
-    return 'inventory'; // Default to Inventory tab
+    return 'provisioning'; // Default to Provisioning tab
   };
 
   return (
@@ -29,15 +28,12 @@ const SiteManagement = () => {
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Site Management & Server Provisioning</h2>
         <p className="text-muted-foreground">
-          Comprehensive tools for site management, digital twin integration, and inventory tracking
+          Comprehensive tools for site management, digital twin integration, and server provisioning
         </p>
       </div>
 
-      <Tabs defaultValue="inventory" value={getActiveTab()} className="space-y-4">
+      <Tabs defaultValue="provisioning" value={getActiveTab()} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="inventory" asChild>
-            <Link to="/sitemanagement/inventory">Inventory Management</Link>
-          </TabsTrigger>
           <TabsTrigger value="provisioning" asChild>
             <Link to="/sitemanagement/provisioning">Provisioning Workflows</Link>
           </TabsTrigger>

@@ -1,6 +1,5 @@
 
-import { useState } from "react";
-import ProvisioningWorkflows from "@/components/inventory/ProvisioningWorkflows";
+import ProvisioningWorkflowsComponent from "@/components/inventory/ProvisioningWorkflows";
 
 const ProvisioningWorkflowsPage = () => {
   return (
@@ -11,7 +10,7 @@ const ProvisioningWorkflowsPage = () => {
           Manage and track provisioning workflows for hardware and infrastructure
         </p>
       </div>
-      <ProvisioningWorkflows />
+      <ProvisioningWorkflowsComponent />
     </div>
   );
 };

@@ -17,7 +17,7 @@ import LocationManagement from "@/pages/LocationManagement";
 import SiteManagement from "@/pages/SiteManagement";
 import MEPEvaluation from "@/pages/site-management/MEPEvaluation";
 import DigitalTwin from "@/pages/site-management/DigitalTwin";
-import InventoryManagement from "@/pages/site-management/InventoryManagement";
+import InventoryManagement from "@/pages/InventoryManagement"; // Updated import path
 import ProvisioningWorkflows from "@/pages/site-management/ProvisioningWorkflows";
 import PowerManagement from "@/pages/PowerManagement";
 import RealTimeMonitoring from "@/pages/power-management/RealTimeMonitoring";
@@ -72,10 +72,10 @@ const App = () => (
               <Route path="visitors" element={<Visitors />} />
               <Route path="settings" element={<Settings />} />
               <Route path="locations" element={<LocationManagement />} />
+              <Route path="inventory" element={<InventoryManagement />} /> {/* New top-level route */}
               <Route path="sitemanagement" element={<SiteManagement />}>
                 <Route path="mep" element={<MEPEvaluation />} />
                 <Route path="digitaltwin" element={<DigitalTwin />} />
-                <Route path="inventory" element={<InventoryManagement />} />
                 <Route path="provisioning" element={<ProvisioningWorkflows />} />
               </Route>
               <Route path="power" element={<PowerManagement />}>
