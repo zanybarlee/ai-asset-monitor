@@ -33,6 +33,7 @@ interface AssetsListProps {
   setSelectedTab: (tab: string) => void;
   onViewAsset: (asset: AssetType) => void;
   onShowQRCode: (asset: AssetType) => void;
+  activeView: string; // Add this prop to fix the type error
 }
 
 const AssetsList = ({ 
@@ -41,7 +42,8 @@ const AssetsList = ({
   selectedTab, 
   setSelectedTab,
   onViewAsset,
-  onShowQRCode
+  onShowQRCode,
+  activeView // Include this in function parameters
 }: AssetsListProps) => {
   const filteredAssets = assets.filter(asset => {
     const matchesSearch = asset.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
