@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,10 +5,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Plus, Filter, FolderSymlink, Clock, BarChart4, DollarSign } from "lucide-react";
 import ProjectsList from "@/components/project-management/ProjectsList";
 import ProjectStatusCards from "@/components/project-management/ProjectStatusCards";
+import NewProjectDialog from "@/components/project-management/NewProjectDialog";
 import { mockProjects } from "@/components/project-management/mock-data";
 
 const ProjectDashboard = () => {
   const [filterTab, setFilterTab] = useState("all");
+  const [showNewProjectDialog, setShowNewProjectDialog] = useState(false);
+  
+  const handleNewProject = () => {
+    setShowNewProjectDialog(true);
+  };
   
   return (
     <div className="space-y-6">
@@ -24,7 +29,7 @@ const ProjectDashboard = () => {
             <Filter className="mr-2 h-4 w-4" />
             Filter
           </Button>
-          <Button>
+          <Button onClick={handleNewProject}>
             <Plus className="mr-2 h-4 w-4" />
             New Project
           </Button>
@@ -130,6 +135,13 @@ const ProjectDashboard = () => {
           </CardContent>
         </Card>
       </div>
+      
+      {showNewProjectDialog && (
+        <NewProjectDialog 
+          open={showNewProjectDialog} 
+          onClose={() => setShowNewProjectDialog(false)} 
+        />
+      )}
     </div>
   );
 };
