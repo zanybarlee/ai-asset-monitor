@@ -19,6 +19,7 @@ const DailyOperations = () => {
     if (location.pathname.includes('/tasks')) return 'tasks';
     if (location.pathname.includes('/compliance')) return 'compliance';
     if (location.pathname.includes('/reporting')) return 'reporting';
+    if (location.pathname.includes('/exceptions')) return 'exceptions';
     return 'tasks'; // Default to tasks tab
   };
 
@@ -41,6 +42,9 @@ const DailyOperations = () => {
           </TabsTrigger>
           <TabsTrigger value="reporting" asChild>
             <Link to="/operations/reporting">Scheduled Reporting</Link>
+          </TabsTrigger>
+          <TabsTrigger value="exceptions" asChild>
+            <Link to="/operations/exceptions">Exception Module</Link>
           </TabsTrigger>
         </TabsList>
         <div className="pt-4">
