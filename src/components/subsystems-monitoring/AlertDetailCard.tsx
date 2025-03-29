@@ -6,9 +6,10 @@ import { AlertTriangle } from "lucide-react";
 
 type AlertDetailProps = {
   handleAcknowledge: (alertId: string) => void;
+  openTicketDialog?: () => void;
 };
 
-const AlertDetailCard = ({ handleAcknowledge }: AlertDetailProps) => {
+const AlertDetailCard = ({ handleAcknowledge, openTicketDialog }: AlertDetailProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -58,7 +59,7 @@ const AlertDetailCard = ({ handleAcknowledge }: AlertDetailProps) => {
       <CardFooter>
         <div className="flex space-x-2 w-full">
           <Button className="flex-1" variant="default" onClick={() => handleAcknowledge("ALT-1234")}>Acknowledge</Button>
-          <Button className="flex-1" variant="outline">Create Ticket</Button>
+          <Button className="flex-1" variant="outline" onClick={openTicketDialog}>Create Ticket</Button>
         </div>
       </CardFooter>
     </Card>
