@@ -28,6 +28,7 @@ import TaskWorkflow from "@/pages/daily-operations/TaskWorkflow";
 import Compliance from "@/pages/daily-operations/Compliance";
 import ScheduledReporting from "@/pages/daily-operations/ScheduledReporting";
 import ExceptionModule from "@/pages/daily-operations/ExceptionModule";
+import SmartReporter from "@/pages/daily-operations/SmartReporter";
 import HistoricalData from "@/pages/HistoricalData";
 import DataRepository from "@/pages/historical-data/DataRepository";
 import AuditTrails from "@/pages/historical-data/AuditTrails";
@@ -91,6 +92,7 @@ const App = () => (
                 <Route path="compliance" element={<Compliance />} />
                 <Route path="reporting" element={<ScheduledReporting />} />
                 <Route path="exceptions" element={<ExceptionModule />} />
+                <Route path="smart-reporter" element={<SmartReporter />} />
               </Route>
               <Route path="historical" element={<HistoricalData />}>
                 <Route path="repository" element={<DataRepository />} />
