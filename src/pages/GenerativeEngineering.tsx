@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Maximize2, Minimize2, ExternalLink } from "lucide-react";
+import { Maximize2, Minimize2, ExternalLink, RefreshCw } from "lucide-react";
 
 const IFRAME_URL = "http://223.25.78.212:9999";
 
@@ -11,6 +11,7 @@ const GenerativeEngineering = () => {
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [detachedWindow, setDetachedWindow] = useState<Window | null>(null);
+  const [key, setKey] = useState(Date.now());
 
   const detachIframe = () => {
     const newWindow = window.open(
@@ -36,10 +37,20 @@ const GenerativeEngineering = () => {
     }
     setIsDetached(false);
     setDetachedWindow(null);
+    // Refresh iframe when reattaching
+    setKey(Date.now());
   };
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
+    if (isMinimized) {
+      // Refresh iframe when maximizing
+      setKey(Date.now());
+    }
+  };
+
+  const refreshIframe = () => {
+    setKey(Date.now());
   };
 
   return (
@@ -54,6 +65,9 @@ const GenerativeEngineering = () => {
         <div className="flex space-x-2">
           {!isDetached && (
             <>
+              <Button variant="outline" size="icon" onClick={refreshIframe} title="Refresh">
+                <RefreshCw className="h-4 w-4" />
+              </Button>
               <Button variant="outline" size="icon" onClick={toggleMinimize}>
                 {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
               </Button>
@@ -78,9 +92,12 @@ const GenerativeEngineering = () => {
           <DrawerContent className="h-[80vh]">
             <div className="p-4 h-full">
               <iframe 
+                key={`drawer-iframe-${key}`}
                 src={IFRAME_URL}
                 className="w-full h-full border rounded"
                 title="Generative Engineering"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                loading="eager"
               />
             </div>
           </DrawerContent>
@@ -90,11 +107,16 @@ const GenerativeEngineering = () => {
       {!isMinimized && !isDetached && (
         <ResizablePanelGroup direction="vertical" className="min-h-[calc(100vh-12rem)] rounded-lg border">
           <ResizablePanel defaultSize={75}>
-            <iframe 
-              src={IFRAME_URL}
-              className="w-full h-full"
-              title="Generative Engineering"
-            />
+            <div className="w-full h-full">
+              <iframe 
+                key={`main-iframe-${key}`}
+                src={IFRAME_URL}
+                className="w-full h-full border-none"
+                title="Generative Engineering"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                loading="eager"
+              />
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={25}>
