@@ -1,6 +1,6 @@
 
 import { useLocation, NavLink } from "react-router-dom";
-import { LayoutDashboard, Box, Clipboard, History, Users, Clock, Settings, ChevronLeft, ChevronRight, Server, Zap, CalendarCheck, Database, MapPin, ListChecks, UserCheck, CalendarRange, FolderSymlink, ShieldCheck, Package } from "lucide-react";
+import { LayoutDashboard, Box, Clipboard, History, Users, Clock, Settings, ChevronLeft, ChevronRight, Server, Zap, CalendarCheck, Database, MapPin, ListChecks, UserCheck, CalendarRange, FolderSymlink, ShieldCheck, Package, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sidebar as ShadcnSidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
 import { useState } from "react";
@@ -25,6 +25,7 @@ const Sidebar = () => {
     { name: "Site Management", href: "/sitemanagement", icon: Server },
     { name: "Power Management", href: "/power", icon: Zap },
     { name: "People Management", href: "/people", icon: UserCheck },
+    { name: "Generative Engineering", href: "/generative-engineering", icon: Code },
     { name: "Visitors", href: "/visitors", icon: Clock },
     { name: "Users", href: "/users", icon: Users },
     { name: "Settings", href: "/settings", icon: Settings },

@@ -51,6 +51,7 @@ import BudgetTracking from "@/pages/project-management/BudgetTracking";
 import ShutdownManagement from "@/pages/project-management/ShutdownManagement";
 import ProjectReports from "@/pages/project-management/ProjectReports";
 import WarrantyManagement from "@/pages/WarrantyManagement";
+import GenerativeEngineering from "@/pages/GenerativeEngineering";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="settings" element={<Settings />} />
               <Route path="locations" element={<LocationManagement />} />
               <Route path="inventory" element={<InventoryManagement />} />
+              <Route path="generative-engineering" element={<GenerativeEngineering />} />
               <Route path="sitemanagement" element={<SiteManagement />}>
                 <Route path="mep" element={<MEPEvaluation />} />
                 <Route path="digitaltwin" element={<DigitalTwin />} />
